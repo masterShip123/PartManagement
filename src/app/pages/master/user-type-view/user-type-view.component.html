@@ -1,0 +1,29 @@
+<nb-card>
+  <nb-card-header>User Type: {{userType_name}}</nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="inputFirstName">User Type ID</label>
+          <input type="text" class="form-control" id="userType_ID" value="{{userType_ID}}" disabled>
+         
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="inputLastName">User Type Name </label>
+          <input type="text" class="form-control" id="userType_name" value="{{userType_name}}" disabled>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="inputLastName">Status</label>
+          <input type="text" class="form-control" id="value1" value="{{value1}}"  disabled>
+        </div>
+      </div>
+    </div>
+    
+    <button nbButton status="danger"  (click)="cancel()"><i class="ion-reply "></i>Back To List</button>
+    <!-- <button nbButton status="warning" [disabled]="email.value   && password.value && Name.value && f.email.errors.email  " (click)="save(surname.value,password.value,email.value,Tel.value,Name.value,sectionValue.value,StatusValue.value,UsertypeValue.value)">Save</button> -->
+  </nb-card-body>
+</nb-card>

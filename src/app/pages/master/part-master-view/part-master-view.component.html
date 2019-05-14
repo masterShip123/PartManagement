@@ -1,0 +1,139 @@
+<nb-card>
+    <nb-card-header>Part Master: {{part_name}}</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputFirstName">Part ID *</label>
+            <input type="text" class="form-control" id="partid" value="{{part_ID}}" #partid required disabled>
+          </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputLastName">Part Name *</label>
+              <input type="text" class="form-control" id="partname" value="{{part_name}}" #partname disabled>
+            </div>
+          </div>
+       
+      </div>
+      
+    
+      <div class="row">
+        
+          <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputLastName">Qty *</label>
+                <input (keypress)="numberOnly($event)" type="text" class="form-control" id="qty" value="{{qty}}" #qtys disabled>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="inputLastName">Price *</label>
+                  <input (keypress)="fixDecimals($event)" type="text" class="form-control" id="price" value="{{price}}"  #prices disabled>
+                </div>
+              </div>
+              
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="inputWebsite">Min Stock *</label>
+                  <input (keypress)="numberOnly($event)" type="text" class="form-control" id="minstock" value="{{min_stock}}" #minstock disabled>
+                </div>
+              </div>
+
+              <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="inputWebsite">Max Stock *</label>
+                    <input (keypress)="numberOnly($event)" type="text" class="form-control" id="maxstock" value="{{max_stock}}" #maxstock disabled>
+                  </div>
+                </div>
+
+              
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Unit Type</label>
+            <div class="form-group">
+              <select class="form-control"  id="unitype"  #unitype disabled>
+                  <option    value="{{unitType_ID}}">{{unitType_name}}</option>
+                  <ng-container *ngFor= "let unitTypes of service.listunitType"  >
+                      
+                      <option   *ngIf="unitTypes.unitType_name != unitType_name" value="{{unitTypes.unitType_ID}}">{{unitTypes.unitType_name}}</option>  
+                  </ng-container>
+                <!-- <option   *ngFor= "let unitTypes of service.listunitType"  value="{{unitTypes.unitType_ID}}">{{unitTypes.unitType_name}}</option>   -->
+              </select>
+            </div> 
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputWebsite">Location</label>
+              <div class="form-group">
+                <select class="form-control"  id="location"  #location disabled>
+                    <option    value="{{location_ID}}">{{location_name}}</option>
+                    <ng-container *ngFor= "let locations of service.listLocation"  >
+                        
+                        <option   *ngIf="locations.location_name != location_name" value="{{locations.location_ID}}">{{locations.location_name}}</option>  
+                    </ng-container>
+                  <!-- <option   *ngFor= "let locations of service.listLocation"  value="{{locations.location_ID}}">{{locations.location_name}}</option>   -->
+                </select>
+              </div> 
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputWebsite">Maker/Brand</label>
+                <div class="form-group">
+                  <select class="form-control"  id="maker"  #maker disabled>
+                      <option    value="{{maker_ID}}">{{maker_name}}</option>
+                      <ng-container *ngFor= "let makers of service.listMaker"  >
+                          
+                          <option   *ngIf="makers.maker_name != maker_name" value="{{makers.maker_ID}}">{{makers.maker_name}}</option>  
+                      </ng-container>
+                    <!-- <option   *ngFor= "let makers of service.listMaker"  value="{{makers.maker_ID}}">{{makers.maker_name}}</option>   -->
+                  </select>
+                </div> 
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="inputWebsite">Mold/Type</label>
+                  <div class="form-group">
+                    <select class="form-control"  id="moldType"  #moldType disabled>
+                        <option    value="{{moldType_ID}}">{{moldType_Name}}</option>
+                        <ng-container *ngFor= "let moldTypes of service.listmoldType"  >
+                            
+                            <option   *ngIf="moldTypes.moldType_Name != moldType_Name" value="{{moldTypes.moldType_ID}}">{{moldTypes.moldType_Name}}</option>  
+                        </ng-container>
+                      <!-- <option   *ngFor= "let moldTypes of service.listmoldType"  value="{{moldTypes.moldType_ID}}">{{moldTypes.moldType_Name}}</option>   -->
+                    </select>
+                  </div> 
+                </div>
+              </div>
+     
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Status</label>
+            <div class="form-group">
+              <select class="form-control"  id="Status" #StatusValue disabled>
+                  <option    value="{{activeFlag}}">{{value1}}</option>
+                  <ng-container *ngFor= "let micdatas of service.listmic"  >
+                      
+                      <option   *ngIf="micdatas.value1 != value1" value="{{micdatas.misc_code}}">{{micdatas.value1}}</option>  
+                  </ng-container>
+                <!-- <option   *ngFor= "let micdatas of service.listmic"  value="{{micdatas.misc_code}}">{{micdatas.value1}}</option>    -->
+              </select>
+            </div> 
+          </div>
+        </div>
+        
+      </div>
+      <button nbButton status="danger"  (click)="cancel()"><i class="ion-reply "></i>Back To List</button>
+      <!-- <button nbButton status="success" [disabled]=" partname.value && qtys.value && prices.value && minstock.value
+       && maxstock.value " (click)="save( partname.value , qtys.value , prices.value , minstock.value
+       , maxstock.value , unitype.value , location.value ,maker.value,moldType.value, StatusValue.value)">Edit</button> -->
+    </nb-card-body>
+  </nb-card>

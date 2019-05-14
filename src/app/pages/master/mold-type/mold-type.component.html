@@ -1,0 +1,18 @@
+<nb-card>
+    <nb-card-header>
+      MoldType List
+    </nb-card-header>
+    <nb-card-body>
+        <div>
+            <button #addvli nbButton shape="round" status="success" class="btn-demo" (click) = "onAddUserlist()"><i class="ion-plus-round "></i>  Register New MoldType</button>
+          </div>
+          <div  *ngIf="showMs">This field is required.</div>
+      <div class="form-group">
+          <!-- <select class="form-control" onChange="check(this)" id="Selecct" (change)="onChange($event.target.value)">
+            <option   *ngFor= "let datas of data">{{datas}}</option>  
+          </select> -->
+        </div>
+    <ng2-smart-table [settings]="settings" [source]="source" (custom) = "onCustom($event)"></ng2-smart-table>
+  </nb-card-body>
+  
+  </nb-card>

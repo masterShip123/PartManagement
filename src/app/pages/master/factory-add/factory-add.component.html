@@ -1,0 +1,43 @@
+<nb-card>
+    <nb-card-header>Factory: Create New</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputFirstName">Factory ID *</label>
+            <input type="text" class="form-control" id="sectionid" placeholder="Factory ID" #factoryid required>
+            <div  *ngIf="showValid">
+              <div>
+                  <h5>Enter incorrect</h5>
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputLastName">Factory Name *</label>
+            <input type="text" class="form-control" id="sectionname" placeholder="Factory Name" #factoryname>
+          </div>
+        </div>
+       
+      </div>
+      <div class="row">
+        
+      
+     
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Status</label>
+            <div class="form-group">
+              <select class="form-control"  id="Status" #StatusValue>
+                <option   *ngFor= "let micdatas of service.listmic"  value="{{micdatas.misc_code}}">{{micdatas.value1}}</option>   
+              </select>
+            </div> 
+          </div>
+        </div>
+        
+      </div>
+      <button nbButton status="danget"  (click)="cancel()">Cancel</button>
+      <button nbButton status="success" [disabled]="factoryid.value && factoryname.value" (click)="submit(factoryid.value,factoryname.value,StatusValue.value)">Create</button>
+    </nb-card-body>
+  </nb-card>

@@ -1,0 +1,48 @@
+<nb-card>
+    <nb-card-header>Machine: {{machine_name}}</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputFirstName">Machine ID *</label>
+            <input type="text" class="form-control" id="machineid" value="{{machine_ID}}" #machineid required disabled>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputLastName">Machine Name *</label>
+            <input type="text" class="form-control" id="machinename" value="{{machine_name}}" #machinename disabled>
+          </div>
+        </div>
+       
+      </div>
+      <div class="row">
+        
+        
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">ProductionLine</label>
+            <div class="form-group">
+              <select class="form-control"  id="factory"  #productionLine disabled>
+                <option  >{{productionLine_name}}</option>  
+              </select>
+            </div> 
+          </div>
+        </div>
+     
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Status</label>
+            <div class="form-group">
+              <select class="form-control"  id="Status" #StatusValue disabled>
+                <option   >{{value1}}</option>   
+              </select>
+            </div> 
+          </div>
+        </div>
+        
+      </div>
+      <button nbButton status="danger"  (click)="cancel()"><i class="ion-reply "></i>Back To List</button>
+      <!-- <button nbButton status="success" [disabled]="machinename.value" (click)="save(machinename.value,productionLine.value,StatusValue.value)">Edit</button> -->
+    </nb-card-body>
+  </nb-card>

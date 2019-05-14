@@ -1,0 +1,104 @@
+<nb-card>
+    <nb-card-header>Maker: Create New</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputFirstName">Maker ID *</label>
+            <input type="text" class="form-control" id="makerid" placeholder="Maker ID" #makerid required>
+            <div  *ngIf="showValid">
+              <div>
+                  <h5>Enter incorrect</h5>
+                </div>
+              </div>
+          </div>
+        </div>
+        
+       
+      </div>
+      <div class="row">
+          
+
+          <div class="col-12">
+              <div class="form-group">
+                <label for="inputLastName">Maker Name *</label>
+                <input type="text" class="form-control" id="makername" placeholder="Maker Name" #makername>
+              </div>
+            </div>
+      </div>
+    
+      <div class="row">
+        
+          <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputLastName">ContactName *</label>
+                <input type="text" class="form-control" id="contactName" placeholder="ContactName" #contactName>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="inputLastName">LastName *</label>
+                  <input type="text" class="form-control" id="lastName" placeholder="LastName" #lastName>
+                </div>
+              </div>
+              
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="inputWebsite">Tel</label>
+                  <input (keypress)="numberOnly($event)" type="text" class="form-control" id="Tel" placeholder="Tel" #tel>
+                </div>
+              </div>
+
+                <form [formGroup]="registerForm" class="col-sm-6">
+                  <div class="form-group">
+                      <!-- <div class="col-sm-6"> -->
+                          
+                            <label for="inputEmail">Email *</label>
+                            <input type="email" 
+                            class="form-control" id="Email" 
+                            placeholder="Email" formControlName="email"  #email required>
+                           
+                          <!-- </div> -->
+                        </div>
+                
+                 
+        
+              </form>
+
+                  <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="inputLastName">Address *</label>
+                        <textarea rows="5" nbInput fullWidth shape="round"  placeholder="Address" #address></textarea>
+                      </div>
+                    </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Province</label>
+            <div class="form-group">
+              <select class="form-control"  id="province"  #province>
+                <option   *ngFor= "let provinces of service.listprovince"  value="{{provinces.province_code}}">{{provinces.province_name_tha}}</option>  
+              </select>
+            </div> 
+          </div>
+        </div>
+     
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Status</label>
+            <div class="form-group">
+              <select class="form-control"  id="Status" #StatusValue>
+                <option   *ngFor= "let micdatas of service.listmic"  value="{{micdatas.misc_code}}">{{micdatas.value1}}</option>   
+              </select>
+            </div> 
+          </div>
+        </div>
+        
+      </div>
+      <button nbButton status="danget"  (click)="cancel()">Cancel</button>
+      <button nbButton status="success" [disabled]=" makerid.value && makername.value && contactName.value && lastName.value && tel.value
+       && email.value && address.value && province.value && StatusValue.value && f.email.errors.email" (click)="submit(makerid.value , makername.value , contactName.value , lastName.value , tel.value
+       , email.value , address.value , province.value , StatusValue.value)">Create</button>
+    </nb-card-body>
+  </nb-card>

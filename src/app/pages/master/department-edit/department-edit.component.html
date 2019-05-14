@@ -1,0 +1,40 @@
+<nb-card>
+    <nb-card-header>Department: {{dept_name}}</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputFirstName">Department ID *</label>
+            <input type="text" class="form-control" id="sectionid" placeholder="{{dept_ID}}" #departmentid required disabled>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputLastName">Department Name *</label>
+            <input type="text" class="form-control" id="sectionname" value="{{dept_name}}" #departmentname>
+          </div>
+        </div>
+       
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Status</label>
+            <div class="form-group">
+              <select class="form-control"  id="Status" #StatusValue>
+                  <option    value="{{activeFlag}}">{{value1}}</option>
+                  <ng-container *ngFor= "let micdatas of service.listmic"  >
+                      
+                      <option   *ngIf="micdatas.value1 != value1" value="{{micdatas.misc_code}}">{{micdatas.value1}}</option>  
+                  </ng-container>
+                <!-- <option   *ngFor= "let micdatas of service.listmic"  value="{{micdatas.misc_code}}">{{micdatas.value1}}</option>    -->
+              </select>
+            </div> 
+          </div>
+        </div>
+        
+      </div>
+      <button nbButton status="danget"  (click)="cancel()">Cancel</button>
+      <button nbButton status="success" [disabled]="departmentname.value" (click)="save(departmentid.value,departmentname.value,StatusValue.value)">Create</button>
+    </nb-card-body>
+  </nb-card>

@@ -1,0 +1,67 @@
+<nb-layout  windowMode>
+  <nb-layout-column right class="small" >
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6">
+        <nb-card>
+          <nb-card-header>Admin</nb-card-header>
+          <nb-card-body>
+            <form class="form-horizontal">
+              <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-3 form-control-label">Username</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="Username" placeholder="Username" #username>
+                  <!-- <div *ngIf="showM">
+                      <div >
+                          <h5> Enter incorrect </h5>
+                      </div>
+                  </div> -->
+                </div>
+                
+                 
+                    
+                    
+              </div>
+              <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-3 form-control-label">Password</label>
+                <div class="col-sm-9">
+                  <input type="password" class="form-control" id="inputPassword3" placeholder="Password" #password>
+                  
+                </div>
+                <!-- <div  *ngIf="password.value  == '' ">
+                    <div>
+                        <h5>Please Enter Password </h5>
+                      </div>
+                    </div> -->
+              </div>
+              <div class="form-group row">
+                <div class="offset-sm-3 col-sm-9">
+                  <div class="checkbox" >
+                    <nb-checkbox>Remember me </nb-checkbox>
+                    <span style="color:crimson;">{{show}}</span>
+                  </div>
+                  <div *ngIf="showM">
+                      <div >
+                          <h5> Enter incorrect </h5>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="offset-sm-3 col-sm-9">
+                  <button class="btn btn-warning"  (click)="checkLogin(username.value,password.value)">Login</button>
+                  <!-- [disabled] = "password.value && username.value " -->
+                </div>
+              </div>
+            </form>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+  </nb-layout-column>
+
+</nb-layout>
+
+
+    

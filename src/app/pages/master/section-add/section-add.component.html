@@ -1,0 +1,53 @@
+<nb-card>
+    <nb-card-header>Section: Create New</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputFirstName">Section ID *</label>
+            <input type="text" class="form-control" id="sectionid" placeholder="Section ID" #sectionid required>
+            <div  *ngIf="showValid">
+              <div>
+                  <h5>Enter incorrect</h5>
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputLastName">Section Name *</label>
+            <input type="text" class="form-control" id="sectionname" placeholder="Section Name" #sectionname>
+          </div>
+        </div>
+       
+      </div>
+      <div class="row">
+        
+        
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Department</label>
+            <div class="form-group">
+              <select class="form-control"  id="department"  #department>
+                <option   *ngFor= "let Departs of service.listDepart"  value="{{Departs.dept_ID}}">{{Departs.dept_name}}</option>  
+              </select>
+            </div> 
+          </div>
+        </div>
+     
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Status</label>
+            <div class="form-group">
+              <select class="form-control"  id="Status" #StatusValue>
+                <option   *ngFor= "let micdatas of service.listmic"  value="{{micdatas.misc_code}}">{{micdatas.value1}}</option>   
+              </select>
+            </div> 
+          </div>
+        </div>
+        
+      </div>
+      <button nbButton status="danget"  (click)="cancel()">Cancel</button>
+      <button nbButton status="success" [disabled]="sectionid.value && sectionname.value" (click)="submit(department.value,sectionid.value,sectionname.value,StatusValue.value)">Create</button>
+    </nb-card-body>
+  </nb-card>

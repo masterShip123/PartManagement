@@ -1,0 +1,103 @@
+<nb-card>
+    <nb-card-header>User: {{empId}}</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputFirstName">Emp ID *</label>
+            <input type="text" class="form-control" id="EmpID" value="{{empId}}" #empid disabled>
+           
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputLastName">Username *</label>
+            <input type="text" class="form-control" id="Username" value="{{userName}}" #Username disabled>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputLastName">Password *</label>
+            <input type="text" class="form-control" id="Password" value="{{user_password}}" #password disabled>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Name *</label>
+            <input type="text" class="form-control" id="Name" value="{{name}}" #Name disabled>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Surname</label>
+            <input type="text" class="form-control" id="Surname" value="{{surname}}"  disabled>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Tel</label>
+            <input (keypress)="numberOnly($event)" type="text" class="form-control" id="Tel" value="{{tel}}" #Tel disabled>
+          </div>
+        </div>
+        
+        <form [formGroup]="registerForm" class="col-sm-6">
+            <div class="form-group">
+                <!-- <div class="col-sm-6"> -->
+                    
+                      <label for="inputEmail">Email *</label>
+                      <input type="email" 
+                      class="form-control" id="Email" 
+                      value="{{email}}" formControlName="email"  required disabled>
+                     
+                    <!-- </div> -->
+                  </div>
+          
+           
+  
+        </form>
+        <!-- <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputEmail">Email *</label>
+            <input type="email" class="form-control" id="Email" placeholder="Email" (change)="onChange($event)"  #Email required>
+           
+          </div>
+        </div> -->
+        
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Section</label>
+            <div class="form-group">
+              <select class="form-control"  id="Section"  #sectionValue disabled>
+                <option  >{{section_name}}</option>  
+              </select>
+            </div> 
+          </div>
+        </div>
+     
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Status</label>
+            <div class="form-group">
+              <select class="form-control"  id="Status" #StatusValue disabled>
+                <option   >{{value1}}</option>   
+              </select>
+            </div> 
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">User Type</label>
+            <div class="form-group">
+              <select class="form-control"  id="Status" #UsertypeValue disabled>
+                <option  >{{userType_name}}</option>   
+              </select>
+            </div> 
+          </div>
+        </div>
+      </div>
+      <button nbButton status="danger"  (click)="cancel()"><i class="ion-reply "></i>Back To List</button>
+      <!-- <button nbButton status="warning" [disabled]="email.value   && password.value && Name.value && f.email.errors.email  " (click)="save(surname.value,password.value,email.value,Tel.value,Name.value,sectionValue.value,StatusValue.value,UsertypeValue.value)">Save</button> -->
+    </nb-card-body>
+  </nb-card>

@@ -1,0 +1,38 @@
+<nb-card>
+    <nb-card-header>RequestType: {{requestType_Name}}</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputFirstName">RequestType ID *</label>
+            <input type="text" class="form-control" id="requestTypeid" value="{{requestType_ID}}" #requestTypeid required disabled>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputLastName">RequestType Name *</label>
+            <input type="text" class="form-control" id="requestTypename" value="{{requestType_Name}}" #requestTypename disabled>
+          </div>
+        </div>
+       
+      </div>
+      <div class="row">
+        
+        
+     
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Status</label>
+            <div class="form-group">
+              <select class="form-control"  id="Status" #StatusValue disabled>
+                <option >{{value1}}</option>   
+              </select>
+            </div> 
+          </div>
+        </div>
+        
+      </div>
+      <button nbButton status="danger"  (click)="cancel()"><i class="ion-reply "></i>Back To List</button>
+      <!-- <button nbButton status="success" [disabled]=" requestTypename.value" (click)="save(requestTypeid.value,requestTypename.value,StatusValue.value)">Edit</button> -->
+    </nb-card-body>
+  </nb-card>

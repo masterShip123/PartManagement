@@ -1,0 +1,119 @@
+<nb-card>
+    <nb-card-header>Part Master: Create New</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputFirstName">Part ID *</label>
+            <input type="text" class="form-control" id="partid" placeholder="Part ID" #partid required>
+            <div  *ngIf="showValid">
+              <div>
+                  <h5>Enter incorrect</h5>
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputLastName">Part Name *</label>
+              <input type="text" class="form-control" id="partname" placeholder="Part Name" #partname>
+            </div>
+          </div>
+       
+      </div>
+      
+    
+      <div class="row">
+        
+          <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputLastName">Qty *</label>
+                <input (keypress)="numberOnly($event)" type="text" class="form-control" id="qty" placeholder="Qty" #qty>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="inputLastName">Price *</label>
+                  <input (keypress)="fixDecimals($event)" type="text" class="form-control" id="price" placeholder="Price" #price>
+                </div>
+              </div>
+              
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="inputWebsite">Min Stock *</label>
+                  <input (keypress)="numberOnly($event)" type="text" class="form-control" id="minstock" placeholder="Min Stock" #minstock>
+                </div>
+              </div>
+
+              <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="inputWebsite">Max Stock *</label>
+                    <input (keypress)="numberOnly($event)" type="text" class="form-control" id="maxstock" placeholder="Max Stock" #maxstock>
+                  </div>
+                </div>
+
+              
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Unit Type</label>
+            <div class="form-group">
+              <select class="form-control"  id="unitype"  #unitype>
+                <option   *ngFor= "let unitTypes of service.listunitType"  value="{{unitTypes.unitType_ID}}">{{unitTypes.unitType_name}}</option>  
+              </select>
+            </div> 
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputWebsite">Location</label>
+              <div class="form-group">
+                <select class="form-control"  id="location"  #location>
+                  <option   *ngFor= "let locations of service.listLocation"  value="{{locations.location_ID}}">{{locations.location_name}}</option>  
+                </select>
+              </div> 
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputWebsite">Maker/Brand</label>
+                <div class="form-group">
+                  <select class="form-control"  id="maker"  #maker>
+                    <option   *ngFor= "let makers of service.listMaker"  value="{{makers.maker_ID}}">{{makers.maker_name}}</option>  
+                  </select>
+                </div> 
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="inputWebsite">Mold/Type</label>
+                  <div class="form-group">
+                    <select class="form-control"  id="moldType"  #moldType>
+                      <option   *ngFor= "let moldTypes of service.listmoldType"  value="{{moldTypes.moldType_ID}}">{{moldTypes.moldType_Name}}</option>  
+                    </select>
+                  </div> 
+                </div>
+              </div>
+     
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Status</label>
+            <div class="form-group">
+              <select class="form-control"  id="Status" #StatusValue>
+                <option   *ngFor= "let micdatas of service.listmic"  value="{{micdatas.misc_code}}">{{micdatas.value1}}</option>   
+              </select>
+            </div> 
+          </div>
+        </div>
+        
+      </div>
+      <button nbButton status="danget"  (click)="cancel()">Cancel</button>
+      <button nbButton status="success" [disabled]=" partid.value && partname.value && qty.value && price.value && minstock.value
+       && maxstock.value " (click)="submit(partid.value , partname.value , qty.value , price.value , minstock.value
+       , maxstock.value , unitype.value , location.value ,maker.value,moldType.value, StatusValue.value)">Create</button>
+    </nb-card-body>
+  </nb-card>

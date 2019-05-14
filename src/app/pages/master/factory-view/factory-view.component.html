@@ -1,0 +1,38 @@
+<nb-card>
+    <nb-card-header>Factory: {{factory_Name}}</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputFirstName">Factory ID *</label>
+            <input type="text" class="form-control" id="factory_ID" value="{{factory_ID}}" #factoryid required disabled>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputLastName">Factory Name *</label>
+            <input type="text" class="form-control" id="factory_Name" value="{{factory_Name}}" #factoryname disabled>
+          </div>
+        </div>
+       
+      </div>
+      <div class="row">
+        
+      
+     
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Status</label>
+            <div class="form-group">
+              <select class="form-control"  id="Status" #StatusValue disabled>
+                <option  >{{value1}}</option>   
+              </select>
+            </div> 
+          </div>
+        </div>
+        
+      </div>
+      <button nbButton status="danger"  (click)="cancel()"><i class="ion-reply "></i>Back To List</button>
+      <!-- <button nbButton status="success" [disabled]="factoryname.value" (click)="save(factoryname.value,StatusValue.value)">Edit</button> -->
+    </nb-card-body>
+  </nb-card>

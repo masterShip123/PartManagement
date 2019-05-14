@@ -1,0 +1,35 @@
+<nb-card>
+    <nb-card-header>Department: {{dept_name}}</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputFirstName">Department ID *</label>
+            <input type="text" class="form-control" id="sectionid" value="{{dept_ID}}" #departmentid required disabled>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputLastName">Department Name *</label>
+            <input type="text" class="form-control" id="sectionname" value="{{dept_name}}" #departmentname disabled>
+          </div>
+        </div>
+       
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputWebsite">Status</label>
+            <div class="form-group">
+              <select class="form-control"  id="Status" #StatusValue disabled>
+                <option  >{{value1}}</option>   
+              </select>
+            </div> 
+          </div>
+        </div>
+        
+      </div>
+      <button nbButton status="danger"  (click)="cancel()"><i class="ion-reply "></i>Back To List</button>
+      <!-- <button nbButton status="success" [disabled]="departmentname.value" (click)="save(departmentid.value,departmentname.value,StatusValue.value)">Create</button> -->
+    </nb-card-body>
+  </nb-card>
