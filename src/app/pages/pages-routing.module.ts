@@ -29,8 +29,8 @@ const routes: Routes = [{
     loadChildren: './master/master.module#MasterModule',
   }, 
   {
-    path: 'bootstrap',
-    loadChildren: './bootstrap/bootstrap.module#BootstrapModule',
+    path: 'information',
+    loadChildren: './information/information.module#InformationModule',
   }, {
     path: 'maps',
     loadChildren: './maps/maps.module#MapsModule',

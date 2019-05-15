@@ -43,7 +43,7 @@ export class UnitTypeComponent implements OnInit {
       ID: {
         title: 'ID',
         type: 'number',
-        
+        width: '5%',
       },
       unitType_ID: {
         title: 'UnitType ID',
@@ -52,11 +52,13 @@ export class UnitTypeComponent implements OnInit {
       unitType_name: {
         title: 'UnitType Name',
         type: 'string',
+        width: '80%',
       },
     
       value1: {
         title: 'Status',
         type: 'string',
+        width: '10%',
       }
     }
   }

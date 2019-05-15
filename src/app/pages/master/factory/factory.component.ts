@@ -43,7 +43,7 @@ export class FactoryComponent implements OnInit {
       ID: {
         title: 'ID',
         type: 'number',
-        
+        width: '5%',
       },
       factory_ID: {
         title: 'Factory ID',
@@ -52,10 +52,12 @@ export class FactoryComponent implements OnInit {
       factory_Name: {
         title: 'Factory Name',
         type: 'string',
+        width: '80%',
       },
       value1: {
         title: 'Status',
         type: 'string',
+        width: '10%',
       }
     }
   }

@@ -43,7 +43,7 @@ export class PartMasterComponent implements OnInit {
       ID: {
         title: 'ID',
         type: 'number',
-        
+        width: '5%',
       },
       part_ID: {
         title: 'Part ID',
@@ -64,10 +64,12 @@ export class PartMasterComponent implements OnInit {
       qty: {
         title: 'Qty',
         type: 'number',
+        width: '7%',
       },
       value1: {
         title: 'Status',
         type: 'string',
+        width: '7%',
       }
     }
   }

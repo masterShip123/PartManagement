@@ -43,7 +43,7 @@ export class LocationComponent implements OnInit {
       ID: {
         title: 'ID',
         type: 'number',
-        
+        width: '5%',
       },
       location_ID: {
         title: 'Location ID',
@@ -52,14 +52,17 @@ export class LocationComponent implements OnInit {
       location_name: {
         title: 'Location Name',
         type: 'string',
+        width: '60%',
       },
       factory_Name:{
         title: 'Factory Name',
         type: 'string',
+        width: '30%',
       },
       value1: {
         title: 'Status',
         type: 'string',
+        width: '10%',
       }
     }
   }

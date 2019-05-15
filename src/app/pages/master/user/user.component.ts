@@ -61,6 +61,7 @@ export class UserComponent implements OnInit {
       ID: {
         title: 'ID',
         type: 'number',
+        width: '5%',
       },
       user_empID: {
         title: 'Emp ID',
@@ -81,6 +82,7 @@ export class UserComponent implements OnInit {
       value1: {
         title: 'Status',
         type: 'string',
+        width: '7%',
       }
     }
   }

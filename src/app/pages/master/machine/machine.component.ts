@@ -43,7 +43,7 @@ export class MachineComponent implements OnInit {
       ID: {
         title: 'ID',
         type: 'number',
-        
+        width: '5%',
       },
       machine_ID: {
         title: 'Machine ID',
@@ -52,14 +52,17 @@ export class MachineComponent implements OnInit {
       machine_name: {
         title: 'Machine Name',
         type: 'string',
+        width: '50%',
       },
       productionLine_name: {
         title: 'ProductionLine Name',
         type: 'string',
+        width: '30%',
       },
       value1: {
         title: 'Status',
         type: 'string',
+        width: '10%',
       }
     }
   }

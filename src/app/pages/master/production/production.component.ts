@@ -43,7 +43,7 @@ export class ProductionComponent implements OnInit {
       ID: {
         title: 'ID',
         type: 'number',
-        
+        width: '5%',
       },
       productionLine_ID: {
         title: 'ProductionLine ID',
@@ -52,14 +52,17 @@ export class ProductionComponent implements OnInit {
       productionLine_name: {
         title: 'ProductionLine Name',
         type: 'string',
+        width: '50%',
       },
       factory_name: {
         title: 'Factory Name',
         type: 'string',
+        width: '30%',
       },
       value1: {
         title: 'Status',
         type: 'string',
+        width: '10%',
       }
     }
   }

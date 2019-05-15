@@ -48,7 +48,7 @@ export class UserTypeComponent implements OnInit {
       ID: {
         title: 'ID',
         type: 'number',
-        
+        width: '5%',
       },
       userType_ID : {
         title: 'User Type ID',
@@ -57,10 +57,12 @@ export class UserTypeComponent implements OnInit {
       userType_name: {
         title: 'User Type Name',
         type: 'string',
+        width: '60%',
       },
       value1: {
         title: 'Status',
         type: 'string',
+        width: '5%',
       }
     }
   }

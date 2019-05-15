@@ -43,7 +43,7 @@ export class RequestTypeComponent implements OnInit {
       ID: {
         title: 'ID',
         type: 'number',
-        
+        width: '5%',
       },
       requestType_ID: {
         title: 'RequestType ID',
@@ -52,10 +52,12 @@ export class RequestTypeComponent implements OnInit {
       requestType_Name: {
         title: 'RequestType Name',
         type: 'string',
+        width: '80%',
       },
       value1: {
         title: 'Status',
         type: 'string',
+        width: '10%',
       }
     }
   }

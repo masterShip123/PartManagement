@@ -43,7 +43,7 @@ export class MoldTypeComponent implements OnInit {
       ID: {
         title: 'ID',
         type: 'number',
-        
+        width: '5%',
       },
       moldType_ID: {
         title: 'MoldType ID',
@@ -52,11 +52,13 @@ export class MoldTypeComponent implements OnInit {
       moldType_Name: {
         title: 'MoldType Name',
         type: 'string',
+        width: '80%',
       },
     
       value1: {
         title: 'Status',
         type: 'string',
+        width: '10%',
       }
     }
   }

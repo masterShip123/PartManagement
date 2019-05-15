@@ -44,7 +44,7 @@ export class DepartmentComponent implements OnInit {
       ID: {
         title: 'ID',
         type: 'number',
-        
+        width: '5%',
       },
       dept_ID: {
         title: 'Department ID',
@@ -53,10 +53,12 @@ export class DepartmentComponent implements OnInit {
       dept_name: {
         title: 'Department Name',
         type: 'string',
+        width: '80%',
       },
       value1: {
         title: 'Status',
         type: 'string',
+        width: '10%',
       }
     }
   }

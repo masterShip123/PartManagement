@@ -7,6 +7,7 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { ThemeModule } from '../@theme/theme.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { ChangpasswordComponent } from '../changpassword/changpassword.component';
+import { InformationComponent } from './information/information.component';
 
 const PAGES_COMPONENTS = [
   PagesComponent,

@@ -44,7 +44,7 @@ export class SectionComponent implements OnInit {
       ID: {
         title: 'ID',
         type: 'number',
-        width: '40px',
+        width: '5%',
       },
       section_ID: {
         title: 'Section ID',
@@ -53,15 +53,17 @@ export class SectionComponent implements OnInit {
       section_name: {
         title: 'Section Name',
         type: 'string',
+        width: '50%',
       },
       dept_name: {
         title: 'Dept Name',
         type: 'string',
+        width: '30%',
       },
       value1: {
         title: 'Status',
         type: 'string',
-        width: '40px',
+        width: '10%',
       }
     }
   }

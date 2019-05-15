@@ -43,7 +43,7 @@ export class MakerComponent implements OnInit {
       ID: {
         title: 'ID',
         type: 'number',
-        
+        width: '5%',
       },
       maker_ID: {
         title: 'Maker ID',
@@ -52,14 +52,17 @@ export class MakerComponent implements OnInit {
       maker_name: {
         title: 'Maker Name',
         type: 'string',
+        width: '60%',
       },
       maker_contactName: {
         title: 'Maker ContactName',
         type: 'string',
+        width: '30%',
       },
       value1: {
         title: 'Status',
         type: 'string',
+        width: '10%',
       }
     }
   }
