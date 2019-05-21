@@ -13,6 +13,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MasterComponent } from '../master/master.component';
 import { InformationComponent } from './information.component';
 import { PartStockComponent } from './part-stock/part-stock.component';
+import { PartStockEditComponent } from './part-stock-edit/part-stock-edit.component';
 const COMPONENTS = [
   InformationComponent
 ];
@@ -39,6 +40,7 @@ const SERVICES = [
   declarations: [
     ...COMPONENTS,
     PartStockComponent,
+    PartStockEditComponent,
     
   ],
   providers: [

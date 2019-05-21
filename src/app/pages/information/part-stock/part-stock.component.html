@@ -12,7 +12,34 @@
           <option   *ngFor= "let datas of data">{{datas}}</option>  
         </select> -->
       </div>
-  <ng2-smart-table [settings]="settings" [source]="source" (custom) = "onCustom($event)"></ng2-smart-table>
+  <ng2-smart-table  [settings]="settings" [source]="source"  (custom) = "onCustom($event)"></ng2-smart-table>
+      <!-- <table #dataTable class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Part ID</th>
+                <th>Part Name</th>
+                <th>Qty</th>
+                <th>Min Stock</th>
+                <th>Max Stock</th>
+                <th>Location</th>
+                <th>Status</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor= "let listPastStocks of service.listPastStock">
+                <td>{{listPastStocks.ID}}</td>
+                <td>System Architect</td>
+                <td>Edinburgh</td>
+                <td>61</td>
+                <td>2011/04/25</td>
+                <td>$320,800</td>
+            </tr>
+            
+        </tbody>
+       
+    </table> -->
 </nb-card-body>
 
 </nb-card>

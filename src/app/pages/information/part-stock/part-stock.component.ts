@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Router } from '@angular/router';
 import { IndexService } from '../../../shared/index.service';
@@ -6,13 +6,17 @@ import { Http } from '@angular/http';
 import { SmartTableService } from '../../../@core/mock/smart-table.service';
 import { NbDialogService } from '@nebular/theme';
 import { partMasterList } from '../../../shared/index.model';
-
+import { PartStockEditComponent } from '../part-stock-edit/part-stock-edit.component';
+declare var $;
 @Component({
   selector: 'ngx-part-stock',
   templateUrl: './part-stock.component.html',
   styleUrls: ['./part-stock.component.scss']
 })
 export class PartStockComponent implements OnInit {
+  list: partMasterList[]
+  @ViewChild('dataTable') table;
+  dataTable: any;
   settings = {
     actions : {
        add: false,
@@ -35,7 +39,6 @@ export class PartStockComponent implements OnInit {
       ID: {
         title: 'ID',
         type: 'number',
-      
       },
       part_ID: {
         title: 'Part ID',
@@ -44,6 +47,7 @@ export class PartStockComponent implements OnInit {
       part_name: {
         title: 'Part Name',
         type: 'string',
+        width: '50%',
       },
       qty: {
         title: 'Qty',
@@ -61,12 +65,22 @@ export class PartStockComponent implements OnInit {
       location_name: {
         title: 'Location',
         type: 'string',
+        width: '20%',
       },
       value1: {
         title: 'Status',
         type: 'string',
       
       }
+    },
+    rowClassFunction: (row) => {
+      //console.log("row.data.userID:: " + row.data.userID + ", this.loggedInUserId:: " + this.loggedInUserId);
+      if (row.data.qty > row.data.max_stock) {
+        return 'qtyMax';
+      }else if(row.data.qty < row.data.max_stock){
+        return 'qtyMin';
+      } 
+      return '';
     }
   }
   private data: string[];
@@ -76,7 +90,9 @@ export class PartStockComponent implements OnInit {
   //private sele: string[];
   ngOnInit() {
     //this.sele = ["Flex"]
-    
+    this.dataTable = $(this.table.nativeElement);
+    this.dataTable.DataTable();
+    this.service.getDataParstock();
   }
   source: LocalDataSource = new LocalDataSource();
   currentUser : string
@@ -84,15 +100,18 @@ export class PartStockComponent implements OnInit {
     private dialogService: NbDialogService) { 
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.service.getLogin().subscribe((Response) =>{
+      
         this.data = Response;
     });
+    
     //const data2 = this.service.getData();
     //this.source.load(data2);
     this.service.getPartMasterList().then((dataa) => {
+    //  this.list = dataa;
       this.source.load(dataa);
       console.log(this.source.load(dataa));
     });
-    
+    // this.source[0].color = "green";
   }
  
   onCustom(event){
@@ -117,12 +136,13 @@ export class PartStockComponent implements OnInit {
     // console.log(event.action);
     if(event.action == "edit"){
      
-      // this.dialogService.open(CheckToolEditComponent).onClose.subscribe((res) => {
-      //   console.log("Res : "+res);
-      //   this.service.getCheckToolList().then((newdata) => {
-      //       this.source.load(newdata);  
-      //      });
-      // });
+      this.dialogService.open(PartStockEditComponent).onClose.subscribe((res) => {
+        console.log("Res : "+res);
+        this.service.getPartMasterList().then((newdata) => {
+           
+            this.source.load(newdata);  
+           });
+      });
     }
   }
   

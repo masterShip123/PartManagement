@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { InformationComponent } from './information.component';
 import { PartStockComponent } from './part-stock/part-stock.component';
+import { PartStockEditComponent } from './part-stock-edit/part-stock-edit.component';
 
 const routes: Routes = [{
   path: '',
@@ -10,6 +11,9 @@ const routes: Routes = [{
   {
     path: 'partStrock',
     component: PartStockComponent,
+  },{
+    path: 'partStrockEdit',
+    component: PartStockEditComponent,
   }
 ]}
 ];

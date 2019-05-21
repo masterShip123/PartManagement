@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs';
 import { Response } from '@angular/http';
-import { sectionList, miscdataList, userTypeList, user, departmentList, FactoryList, ProductionLineList, ProvinceList, unitTypeList, locationList, makerList, moldTypeList } from './index.model';
+import { sectionList, miscdataList, userTypeList, user, departmentList, FactoryList, ProductionLineList, ProvinceList, unitTypeList, locationList, makerList, moldTypeList, partMasterList } from './index.model';
 import { HttpClient } from "@angular/common/http";
 
 
@@ -12,7 +12,9 @@ export class IndexService {
 
  list: sectionList[];
  listmic: miscdataList[];
+ listmicPartStock : miscdataList[];
  listTiming: miscdataList[];
+ listPastStock: partMasterList[];
  listUsertype: userTypeList[];
  listUser: user[];
  listDepart: departmentList[];
@@ -552,6 +554,17 @@ export class IndexService {
     this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbmMiscDataList")
     .toPromise().then(res => this.listmic = res as miscdataList[]);
   }
+  getDataMicPartStock(){
+    // return this.http.get("http://localhost:62943/showTableWebService.asmx/GetSectionList").map((res) => res.json());
+    this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbmMiscPartStockDataList")
+    .toPromise().then(res => this.listmicPartStock = res as miscdataList[]);
+  }
+  getDataParstock(){
+    // return this.http.get("http://localhost:62943/showTableWebService.asmx/GetSectionList").map((res) => res.json());
+    this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetPartMasterJoin")
+    .toPromise().then(res => this.listPastStock = res as partMasterList[]);
+  }
+  
   getDataMicTiming(){
     // return this.http.get("http://localhost:62943/showTableWebService.asmx/GetSectionList").map((res) => res.json());
     this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbmMiscDataTimingList")
@@ -914,6 +927,24 @@ export class IndexService {
             +'&partname='+partname+'&qty='+qty
             +'&price='+price+'&minstock='+minstock+'&maxstock='+maxstock
             +'&unitype='+unitype+'&location='+location+'&maker='+maker+'&moldType='+moldType+'&StatusValue='+StatusValue,{
+                }).subscribe((res: Response) => {
+                  
+              })
+       
+      });
+    });
+  }
+  postPartStockList(part_ID,partname, Qty,currentqty, price, minstock
+    , maxstock, StatusValue): Promise<any> {
+    //console.log("ID: "+id);
+    return new Promise(( reject) => {
+      setTimeout(() => {
+        // resolve(this.smartTableData);
+       
+          return this.http.get('http://localhost:62943/showTableWebService.asmx/postPartStockList?part_ID='+part_ID
+            +'&partname='+partname+'&Qty='+Qty+"&currentqty="+currentqty
+            +'&price='+price+'&minstock='+minstock+'&maxstock='+maxstock
+            +'&StatusValue='+StatusValue,{
                 }).subscribe((res: Response) => {
                   
               })

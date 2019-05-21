@@ -11,4 +11,42 @@
   :host /deep/ ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
     color: #5dcfe3;
   }
+  
+    // :host /deep/ table tbody tr:nth-child(2) {
+    // background: green!important;
+    // }
+
+    // :host /deep/ tr.solved {
+    //   background: rgba(86, 241, 86, 0.5);
+    //   }
+  
+    //   :host /deep/ tr.aborted {
+    //     background: rgba(243, 69, 69, 0.5);
+    //     }
+    :host /deep/ ng2-smart-table table tbody tr.aborted:nth-child(4) { 
+      background-color:blue; } 
+
+      th {
+        color: white;
+      }
+      td{
+        color: black;
+      }
+
+      $table-font-color: #606c71;
+$table-border-color: #e9ebec;
+
+:host /deep/ ng2-smart-table tbody > tr.qtyMax > td  { 
+  border: 1px solid grey;
+  background-color:green;
+}
+:host /deep/ ng2-smart-table tbody > tr.qtyMin > td  { 
+  border: 1px solid grey;
+  background-color: red;
+}  
+// .ship{
+//   color: green;
+// } 
+      
+
  

@@ -44,6 +44,7 @@ activeFlag : number;
 
 }
 export class partMasterList{
+  ID : number;
   part_ID : string;
   part_name : string;
 
