@@ -70,28 +70,28 @@ export const MENU_ITEMS: NbMenuItem[] = [
       }
     ],
   },
-  // {
-  //   title: 'Forms',
-  //   icon: 'nb-compose',
-  //   children: [
-  //     {
-  //       title: 'Form Inputs',
-  //       link: '/pages/forms/inputs',
-  //     },
-  //     {
-  //       title: 'Form Layouts',
-  //       link: '/pages/forms/layouts',
-  //     },
-  //     {
-  //       title: 'Buttons',
-  //       link: '/pages/forms/buttons',
-  //     },
-  //     {
-  //       title: 'Datepicker',
-  //       link: '/pages/forms/datepicker',
-  //     },
-  //   ],
-  // },
+  {
+    title: 'Forms',
+    icon: 'nb-compose',
+    children: [
+      {
+        title: 'Repair and Rebuild Request',
+        link: '/pages/forme/repair',
+      },
+      // {
+      //   title: 'Form Layouts',
+      //   link: '/pages/forms/layouts',
+      // },
+      // {
+      //   title: 'Buttons',
+      //   link: '/pages/forms/buttons',
+      // },
+      // {
+      //   title: 'Datepicker',
+      //   link: '/pages/forms/datepicker',
+      // },
+    ],
+  },
   {
     title: 'Information',
     icon: 'ion-information',

@@ -8,6 +8,7 @@ import { ThemeModule } from '../@theme/theme.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { ChangpasswordComponent } from '../changpassword/changpassword.component';
 import { InformationComponent } from './information/information.component';
+import { FormeComponent } from './forme/forme.component';
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -22,7 +23,8 @@ const PAGES_COMPONENTS = [
     MiscellaneousModule,
   ],
   declarations: [
-    ...PAGES_COMPONENTS,
+    ...PAGES_COMPONENTS
+    
   ],
 })
 export class PagesModule {

@@ -31,7 +31,11 @@ const routes: Routes = [{
   {
     path: 'information',
     loadChildren: './information/information.module#InformationModule',
-  }, {
+  },{
+    path: 'forme',
+    loadChildren: './forme/forme.module#FormeModule',
+  }, 
+  {
     path: 'maps',
     loadChildren: './maps/maps.module#MapsModule',
   }, {

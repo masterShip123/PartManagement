@@ -1,0 +1,164 @@
+<nb-card>
+  <nb-card-header>
+    Repair and Rebuild Request
+  </nb-card-header>
+  <!-- row 1 -->
+  <div class="col-md-12">
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="inputFirstName">Request no </label>
+          <input type="text" class="form-control" id="checkToolid" placeholder="CheckTool ID" #checkToolid required>
+        
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="inputLastName">Request date</label>
+          <input type="text" class="form-control" id="checkToolname" placeholder="CheckTool Name" #checkToolname>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="inputLastName">Request time</label>
+          <input type="text" class="form-control" id="checkToolname" placeholder="CheckTool Name" #checkToolname>
+        </div>
+      </div>
+    </div>
+    <!-- row 2  -->
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="inputFirstName">Request by</label>
+          <input type="text" class="form-control" id="checkToolid" placeholder="CheckTool ID" #checkToolid required>
+        
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="inputLastName">Section</label>
+          <input type="text" class="form-control" id="checkToolname" placeholder="CheckTool Name" #checkToolname>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="inputLastName">Department</label>
+          <input type="text" class="form-control" id="checkToolname" placeholder="CheckTool Name" #checkToolname>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  
+  <!-- Trap -->
+ 
+    <div class="col-md-12" >
+        <nb-card >
+            <nb-tabset fullWidth>
+              <nb-tab tabTitle="Request Detail">
+                
+                  <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="inputWebsite">Request Type</label>
+                        <div class="form-group">
+                          <select class="form-control"  id="Status" #StatusValue>
+                            <option   value="asd">Repair</option>   
+                          </select>
+                        </div> 
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="inputWebsite">Location / Process</label>
+                          <div class="form-group">
+                            <select class="form-control"  id="Status" #StatusValue>
+                              <!-- <option   *ngFor= "let micdatas of service.listmic"  value="{{micdatas.misc_code}}">{{micdatas.value1}}</option>    -->
+                            </select>
+                          </div> 
+                        </div>
+                      </div>
+                <!-- End Row -->
+                <div class="col-sm-12">
+                    <div class="form-group">
+                      <label for="inputLastName">Befor Problem Description (รายละเอียดปัญหาก่อนแก้ไข)</label>
+                      <textarea rows="5" nbInput fullWidth shape="round"  placeholder="Address" #address></textarea>
+                    </div>
+                  </div>
+              
+              <div class="col-sm-12">
+                 <label for="inputLastName">Befor Picture Problem (รูปภาพปัญหาก่อนการแก้ไข)</label>
+              </div>
+              
+              
+              
+             
+                  <div class="col-sm-2">
+                      
+                      <button nbButton status="danget"  (click)="cancel()">Choose File</button>
+                   
+                  </div>  
+                  <div class="col-sm-12">
+                      <label for="inputLastName">No File Chosen</label>
+                   </div>
+             
+                  <div class="col-sm-4">
+                      <nb-card>
+                          <nb-card-header>Form without labels</nb-card-header>
+                          <nb-card-body>
+                            <form>
+                              <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Recipients">
+                              </div>
+                             
+                              <button type="submit" class="btn btn-success">Send</button>
+                            </form>
+                          </nb-card-body>
+                        </nb-card>
+                   </div>
+                   
+                   <div class="col-sm-4">
+                      <nb-card>
+                          <nb-card-header>Form without labels</nb-card-header>
+                          <nb-card-body>
+                            <form>
+                              <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Recipients">
+                              </div>
+                              
+                              <button type="submit" class="btn btn-success">Send</button>
+                            </form>
+                          </nb-card-body>
+                        </nb-card>
+                   </div>
+                   <div class="col-sm-4">
+                      <nb-card>
+                          <nb-card-header>Form without labels</nb-card-header>
+                          <nb-card-body>
+                            <form>
+                              <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Recipients">
+                              </div>
+                              
+                              <button type="submit" class="btn btn-success">Send</button>
+                            </form>
+                          </nb-card-body>
+                        </nb-card>
+                   </div>
+           
+              
+              </nb-tab>
+              <nb-tab tabTitle="Repair Detail">
+                <span>Content #2</span>
+              </nb-tab>
+            </nb-tabset>
+          </nb-card>
+
+    
+    
+  </div>
+  <nb-card-body>
+     
+</nb-card-body>
+
+</nb-card>
