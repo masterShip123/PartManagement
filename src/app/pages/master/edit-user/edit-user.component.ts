@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { IndexService } from '../../../shared/index.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
 import { LocalDataSource } from 'ng2-smart-table';
+import { Observable, Subscription, timer } from 'rxjs';
+import { IdleTimeoutServiceService } from '../../../shared/idle-timeout-service.service';
 
 @Component({
   selector: 'ngx-edit-user',
@@ -11,7 +13,11 @@ import { LocalDataSource } from 'ng2-smart-table';
   styleUrls: ['./edit-user.component.scss']
 })
 export class EditUserComponent implements OnInit {
-
+  public _counter: number = 0;
+  public _status: string = "Initialized.";
+  private _timer: Observable<number>;
+  private _timerSubscription: Subscription;
+  private _idleTimerSubscription: Subscription;
   empId: string = "";
   userName: string = "";
   name: string = "";
@@ -28,9 +34,21 @@ export class EditUserComponent implements OnInit {
   registerForm: FormGroup;
   source: LocalDataSource = new LocalDataSource();
   constructor(private router: Router,public service: IndexService,private fb: FormBuilder,protected ref: NbDialogRef<EditUserComponent>,
-    private toastrService: NbToastrService,private formBuilder: FormBuilder) { }
+    private toastrService: NbToastrService,private formBuilder: FormBuilder,private changeRef: ChangeDetectorRef,
+    private idleTimeoutSvc: IdleTimeoutServiceService) { }
 
+    public startCounter() {
+      if (this._timerSubscription) {
+          this._timerSubscription.unsubscribe();
+      }
   
+      this._counter = 0;
+      this._timer = timer(1000, 1000);
+      this._timerSubscription = this._timer.subscribe(n => {
+          this._counter++;
+          this.changeRef.markForCheck();
+      });
+    }
   ngOnInit() {
     this.service.getDataUser(); 
     this.service.getDataSection();
@@ -55,13 +73,25 @@ export class EditUserComponent implements OnInit {
       email: ['', [Validators.required, Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]]
       
   });
+      this.startCounter();
+      this._idleTimerSubscription = this.idleTimeoutSvc.timeoutExpired.subscribe(res => {
+        localStorage.setItem('currentUser', null);
+        localStorage.setItem('passwordUser', null);
+        localStorage.setItem('sectionID', null);
+        //localStorage.removeItem('currentUser');
+        this.router.navigate(['./login']);
+      })
   }
   get f() { return this.registerForm.controls; }
   cancel() {
+    this.startCounter();
+    this.idleTimeoutSvc.resetTimer();
     this.ref.close();
   }
   save(surname,password,email,Tel,Name,sectionValue,StatusValue,UsertypeValue){
       // this.empId;
+      this.startCounter();
+    this.idleTimeoutSvc.resetTimer();
       this.service.putUserList(this.empId,surname,password,email,Tel,Name,sectionValue,StatusValue,UsertypeValue);
         // this.ref.close();
         this.service.getUserList().then((data) => {

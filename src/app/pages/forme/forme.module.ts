@@ -12,9 +12,20 @@ import { IndexService } from '../../shared/index.service';
 import { NbDialogService } from '@nebular/theme';
 import { PartStockComponent } from '../information/part-stock/part-stock.component';
 import { RepairRequestComponent } from './repair-request/repair-request.component';
+import { UiFeaturesComponent } from '../ui-features/ui-features.component';
+import { GridComponent } from '../ui-features/grid/grid.component';
+import { IconsComponent } from '../ui-features/icons/icons.component';
+import { TypographyComponent } from '../ui-features/typography/typography.component';
+import { SearchComponent } from '../maps/search-map/search/search.component';
+import { EmailService } from '../../shared/email.service';
 
 const COMPONENTS = [
-  FormeComponent
+  FormeComponent,
+  UiFeaturesComponent,
+  GridComponent,
+  IconsComponent,
+  TypographyComponent,
+  SearchComponent,
 ];
 
 const MODULES = [
@@ -24,12 +35,14 @@ const MODULES = [
   ToasterModule.forRoot(),
   Ng2SmartTableModule,
   ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+ 
 ];
 
 const SERVICES = [
   IndexService,
-  NbDialogService
+  NbDialogService,
+  EmailService
 ];
 
 @NgModule({

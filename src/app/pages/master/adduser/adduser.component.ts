@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { IndexService } from '../../../shared/index.service';
 import { Http } from '@angular/http';
@@ -10,6 +10,8 @@ import { ToasterConfig } from 'angular2-toaster';
 import { LocalDataSource } from 'ng2-smart-table';
 import { UserComponent } from '../user/user.component';
 import { user } from '../../../shared/index.model';
+import { Observable, Subscription, timer } from 'rxjs';
+import { IdleTimeoutServiceService } from '../../../shared/idle-timeout-service.service';
 
 function emailDomainValidator(control: FormControl) {
   let email = control.value;
@@ -31,7 +33,11 @@ function emailDomainValidator(control: FormControl) {
   styleUrls: ['./adduser.component.scss']
 })
 export class AdduserComponent implements OnInit {
-
+  public _counter: number = 0;
+  public _status: string = "Initialized.";
+  private _timer: Observable<number>;
+  private _timerSubscription: Subscription;
+  private _idleTimerSubscription: Subscription;
   // private tbsection:sectionList[];
   //countryForm: FormGroup;
   first = "";
@@ -55,8 +61,21 @@ export class AdduserComponent implements OnInit {
   showValid: boolean = false;
   private datauser: user[];
   constructor(private router: Router,public service: IndexService,private fb: FormBuilder,protected ref: NbDialogRef<AdduserComponent>,
-    private toastrService: NbToastrService,private formBuilder: FormBuilder) { 
+    private toastrService: NbToastrService,private formBuilder: FormBuilder,private changeRef: ChangeDetectorRef,
+    private idleTimeoutSvc: IdleTimeoutServiceService) { 
     
+  }
+  public startCounter() {
+    if (this._timerSubscription) {
+        this._timerSubscription.unsubscribe();
+    }
+
+    this._counter = 0;
+    this._timer = timer(1000, 1000);
+    this._timerSubscription = this._timer.subscribe(n => {
+        this._counter++;
+        this.changeRef.markForCheck();
+    });
   }
   registerForm: FormGroup;
   ngOnInit() {
@@ -69,15 +88,26 @@ export class AdduserComponent implements OnInit {
       email: ['', [Validators.required, Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),emailDomainValidator]]
       
   });
-     
+       this.startCounter();
+      this._idleTimerSubscription = this.idleTimeoutSvc.timeoutExpired.subscribe(res => {
+        localStorage.setItem('currentUser', null);
+        localStorage.setItem('passwordUser', null);
+        localStorage.setItem('sectionID', null);
+        //localStorage.removeItem('currentUser');
+        this.router.navigate(['./login']);
+      })
   }
   get f() { return this.registerForm.controls; }
   cancel() {
+    this.startCounter();
+    this.idleTimeoutSvc.resetTimer();
     this.ref.close();
   }
   
   submit(surname,password,Email,Tel,Name,Username,empid,idsection,miccode,usertype) {
     // console.log(empid+" "+idsection+" "+miccode+" "+usertype);
+    this.startCounter();
+    this.idleTimeoutSvc.resetTimer();
     this.userId = Username +""+empid;
     this.service.getCheckToolList().then((dataa) => {
       this.datauser = dataa;

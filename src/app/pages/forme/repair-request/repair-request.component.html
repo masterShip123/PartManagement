@@ -2,6 +2,9 @@
   <nb-card-header>
     Repair and Rebuild Request
   </nb-card-header>
+
+  
+
   <!-- row 1 -->
   <div class="col-md-12">
 
@@ -9,20 +12,20 @@
       <div class="col-md-4">
         <div class="form-group">
           <label for="inputFirstName">Request no </label>
-          <input type="text" class="form-control" id="checkToolid" placeholder="CheckTool ID" #checkToolid required>
+          <input type="text" class="form-control" id="requestno" placeholder="CheckTool ID" #requestno disabled>
         
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="inputLastName">Request date</label>
-          <input type="text" class="form-control" id="checkToolname" placeholder="CheckTool Name" #checkToolname>
+          <input type="text" class="form-control" id="requestdate" placeholder="CheckTool Name" #requestdate disabled>
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="inputLastName">Request time</label>
-          <input type="text" class="form-control" id="checkToolname" placeholder="CheckTool Name" #checkToolname>
+          <input type="text" class="form-control" id="requesttime" placeholder="CheckTool Name" #requesttime disabled>
         </div>
       </div>
     </div>
@@ -31,20 +34,20 @@
       <div class="col-md-4">
         <div class="form-group">
           <label for="inputFirstName">Request by</label>
-          <input type="text" class="form-control" id="checkToolid" placeholder="CheckTool ID" #checkToolid required>
+          <input type="text" class="form-control" id="requestby" placeholder="CheckTool ID" #requestby disabled>
         
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="inputLastName">Section</label>
-          <input type="text" class="form-control" id="checkToolname" placeholder="CheckTool Name" #checkToolname>
+          <input type="text" class="form-control" id="section" placeholder="CheckTool Name" #section disabled>
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="inputLastName">Department</label>
-          <input type="text" class="form-control" id="checkToolname" placeholder="CheckTool Name" #checkToolname>
+          <input type="text" class="form-control" id="department" placeholder="CheckTool Name" #department disabled>
         </div>
       </div>
     </div>
@@ -61,11 +64,9 @@
                   <div class="col-sm-6">
                       <div class="form-group">
                         <label for="inputWebsite">Request Type</label>
-                        <div class="form-group">
-                          <select class="form-control"  id="Status" #StatusValue>
-                            <option   value="asd">Repair</option>   
+                        <select class="form-control"  id="Status" #StatusValue>
+                            <!-- <option   *ngFor= "let micdatas of service.listmic"  value="{{micdatas.misc_code}}">{{micdatas.value1}}</option>    -->
                           </select>
-                        </div> 
                       </div>
                     </div>
                     <div class="col-sm-6">
@@ -93,60 +94,102 @@
               
               
              
-                  <div class="col-sm-2">
+                  <!-- <div class="col-sm-2">
                       
                       <button nbButton status="danget"  (click)="cancel()">Choose File</button>
                    
                   </div>  
                   <div class="col-sm-12">
                       <label for="inputLastName">No File Chosen</label>
-                   </div>
-             
-                  <div class="col-sm-4">
-                      <nb-card>
-                          <nb-card-header>Form without labels</nb-card-header>
-                          <nb-card-body>
-                            <form>
-                              <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Recipients">
-                              </div>
-                             
-                              <button type="submit" class="btn btn-success">Send</button>
-                            </form>
-                          </nb-card-body>
-                        </nb-card>
+                   </div> -->
+                   <!-- <div class="col-sm-12">
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" multiple formControlName="importFile" id="importFile" (change)="onFileChange($event.target.files)">
+                      <label class="custom-file-label" #labelImport for="importFile"><i class="fas fa-search"></i> Choose file</label>              
+                    </div>
+                   </div> -->
+                  
+                   <div class="col-sm-12">
+                      <input type="file" multiple class="form-control-file" id="importFile" (change)="onFileChange($event.target.files)">
+                          <nb-card class="list-card" size="small">
+                              <nb-card-body>
+                                  <form>
+                                      <div class="form-group">
+                                          
+                                         
+                                          <div class="table-responsive">
+                                            <table class="table  table-striped">
+                                              <thead>
+                                                <tr>
+                                                  <th>Name</th>
+                                                  <th>Actions</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <tr *ngFor="let empLists of empList ; let i = index">
+                                                  <td>{{empLists.name}}</td>
+                                                  <td><button type="button" class="btn btn-danger btn-xs"
+                                                    (click)="removeLanguague(empLists, i)">
+                                                  <span class="glyphicon glyphicon-trash"></span> Remove
+                                                   </button></td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                        </div>
+              
+                                      </form>
+                                </nb-card-body>
+                            </nb-card>
+                          
                    </div>
                    
-                   <div class="col-sm-4">
-                      <nb-card>
-                          <nb-card-header>Form without labels</nb-card-header>
-                          <nb-card-body>
-                            <form>
-                              <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Recipients">
-                              </div>
-                              
-                              <button type="submit" class="btn btn-success">Send</button>
-                            </form>
-                          </nb-card-body>
-                        </nb-card>
-                   </div>
-                   <div class="col-sm-4">
-                      <nb-card>
-                          <nb-card-header>Form without labels</nb-card-header>
-                          <nb-card-body>
-                            <form>
-                              <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Recipients">
-                              </div>
-                              
-                              <button type="submit" class="btn btn-success">Send</button>
-                            </form>
-                          </nb-card-body>
-                        </nb-card>
-                   </div>
-           
-              
+                
+                      <div class="col-md-4">
+                    
+                          <nb-card>
+                              <nb-card-header>Request person</nb-card-header>
+                              <nb-card-body>
+                                <form>
+                                  <div class="form-group">
+                                      <label >Choose file</label>   
+                                  </div>
+                                  <button nbButton status="success" (click)="createRequest()">Create</button>
+                                  <button nbButton status="danger"  (click)="cancel()">Cancel</button>
+                                 
+                                </form>
+                              </nb-card-body>
+                            </nb-card>
+                       </div>
+                
+                       <div class="col-md-4">
+                          <nb-card>
+                              <nb-card-header>Section Approve (LD Up)</nb-card-header>
+                              <nb-card-body>
+                                <form>
+                                  <div class="form-group">
+                                      <label >Choose file</label>   
+                                  </div>
+                                  <button type="submit" class="btn btn-success">Create</button>
+                                  <button nbButton status="danger"  (click)="cancel()">Cancel</button>
+                                </form>
+                              </nb-card-body>
+                            </nb-card>
+                       </div>
+                       <div class="col-md-4">
+                          <nb-card>
+                              <nb-card-header>Repair section Approve (ACH Up)</nb-card-header>
+                              <nb-card-body>
+                                <form>
+                                  <div class="form-group">
+                                      <label >Choose file</label>   
+                                  </div>
+                                  <button type="submit" class="btn btn-success">Create</button>
+                                  <button nbButton status="danger"  (click)="cancel()">Cancel</button>
+                                </form>
+                              </nb-card-body>
+                            </nb-card>
+                       </div>
               </nb-tab>
               <nb-tab tabTitle="Repair Detail">
                 <span>Content #2</span>

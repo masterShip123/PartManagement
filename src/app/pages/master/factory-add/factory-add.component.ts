@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { IndexService } from '../../../shared/index.service';
 import { FormBuilder } from '@angular/forms';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
 import { LocalDataSource } from 'ng2-smart-table';
 import { FactoryList } from '../../../shared/index.model';
+import { Observable, Subscription, timer } from 'rxjs';
+import { IdleTimeoutServiceService } from '../../../shared/idle-timeout-service.service';
 
 @Component({
   selector: 'ngx-factory-add',
@@ -12,7 +14,11 @@ import { FactoryList } from '../../../shared/index.model';
   styleUrls: ['./factory-add.component.scss']
 })
 export class FactoryAddComponent implements OnInit {
-
+  public _counter: number = 0;
+  public _status: string = "Initialized.";
+  private _timer: Observable<number>;
+  private _timerSubscription: Subscription;
+  private _idleTimerSubscription: Subscription;
   checkPrimarykey : number = 0;
   showValid: boolean = false;
   private factoryList: FactoryList[];
@@ -32,7 +38,8 @@ export class FactoryAddComponent implements OnInit {
   validEmail:boolean = false;
   private data: string[];
   constructor(private router: Router,public service: IndexService,private fb: FormBuilder,protected ref: NbDialogRef<FactoryAddComponent>,
-    private toastrService: NbToastrService,private formBuilder: FormBuilder) { 
+    private toastrService: NbToastrService,private formBuilder: FormBuilder,private changeRef: ChangeDetectorRef,
+    private idleTimeoutSvc: IdleTimeoutServiceService) { 
     
   }
 
@@ -49,12 +56,36 @@ export class FactoryAddComponent implements OnInit {
       this.source.load(dataa);
       console.log(this.source.load(dataa));
     });
+    this.startCounter();
+    this._idleTimerSubscription = this.idleTimeoutSvc.timeoutExpired.subscribe(res => {
+      localStorage.setItem('currentUser', null);
+      localStorage.setItem('passwordUser', null);
+      localStorage.setItem('sectionID', null);
+      //localStorage.removeItem('currentUser');
+      this.router.navigate(['./login']);
+    })
+  }
+  public startCounter() {
+    if (this._timerSubscription) {
+        this._timerSubscription.unsubscribe();
+    }
+
+    this._counter = 0;
+    this._timer = timer(1000, 1000);
+    this._timerSubscription = this._timer.subscribe(n => {
+        this._counter++;
+        this.changeRef.markForCheck();
+    });
   }
   cancel() {
+    this.startCounter();
+    this.idleTimeoutSvc.resetTimer();
     this.ref.close();
   }
   
   submit(factoryid,factoryname,StatusValue) {
+    this.startCounter();
+    this.idleTimeoutSvc.resetTimer();
     // console.log(empid+" "+idsection+" "+miccode+" "+usertype);
     this.service.getCheckToolList().then((dataa) => {
       this.factoryList = dataa;

@@ -138,3 +138,36 @@ export class user{
         updateBy : string;
 
 }
+
+export class tableFilename
+{
+  name: string
+}
+
+export class requestHeader{
+  count : number;
+ request_ID: string;
+   requestType_ID : string;
+   user_ID: string;
+   section_ID : string;
+   location_ID : string;
+  beforeDetail : string;
+  requestApproveBy : string;
+  requestSectionBy : string;
+   repairSectionBy: string;
+  repairPersonBy : string;
+  confirmRepairBy: string;
+   qaApproveBy : string;
+  achApproveBy: string;
+  status: number;
+  checkToolBefore_ID : string;
+  checkToolAfter_ID : string;
+  attachFile : number;
+  afterComment : string;
+   afterDescription : string;
+  confirmJudment : number;
+  concernQA: number;
+  createBy : string;
+ updateBy : string;
+  
+}

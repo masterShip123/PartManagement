@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { IndexService } from '../../../shared/index.service';
 import { LocalDataSource } from 'ng2-smart-table';
@@ -11,6 +11,8 @@ import { EditUserComponent } from '../edit-user/edit-user.component';
 import { ViewUserComponent } from '../view-user/view-user.component';
 import { user } from '../../../shared/index.model';
 import { disableBindings } from '@angular/core/src/render3';
+import { Observable, Subscription, timer } from 'rxjs';
+import { IdleTimeoutServiceService } from '../../../shared/idle-timeout-service.service';
 
 @Component({
   selector: 'ngx-user',
@@ -92,12 +94,25 @@ export class UserComponent implements OnInit {
   //private sele: string[];
   ngOnInit() {
     //this.sele = ["Flex"]
-    
+    this.startCounter();
+    this._idleTimerSubscription = this.idleTimeoutSvc.timeoutExpired.subscribe(res => {
+      localStorage.setItem('currentUser', null);
+      localStorage.setItem('passwordUser', null);
+      localStorage.setItem('sectionID', null);
+      //localStorage.removeItem('currentUser');
+      this.router.navigate(['./login']);
+    })
   }
   source: LocalDataSource = new LocalDataSource();
   currentUser : string
+  public _counter: number = 0;
+  public _status: string = "Initialized.";
+  private _timer: Observable<number>;
+  private _timerSubscription: Subscription;
+  private _idleTimerSubscription: Subscription;
   constructor(private router: Router,public service: IndexService,public http: Http,private ser: SmartTableService,
-    private dialogService: NbDialogService) { 
+    private dialogService: NbDialogService,private changeRef: ChangeDetectorRef,
+    private idleTimeoutSvc: IdleTimeoutServiceService) { 
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.service.getLogin().subscribe((Response) =>{
         this.data = Response;
@@ -110,8 +125,23 @@ export class UserComponent implements OnInit {
     });
     
   }
+
+  public startCounter() {
+    if (this._timerSubscription) {
+        this._timerSubscription.unsubscribe();
+    }
+
+    this._counter = 0;
+    this._timer = timer(1000, 1000);
+    this._timerSubscription = this._timer.subscribe(n => {
+        this._counter++;
+        this.changeRef.markForCheck();
+    });
+  }
  
   onCustom(event){
+    this.startCounter();
+    this.idleTimeoutSvc.resetTimer();
     localStorage.setItem('userListEmpId', JSON.stringify(event.data.user_empID));
     // Username +""+empid
     
@@ -185,6 +215,8 @@ export class UserComponent implements OnInit {
     
   }
   onAddUserlist(): void{
+    this.startCounter();
+    this.idleTimeoutSvc.resetTimer();
     this.dialogService.open(AdduserComponent).onClose.subscribe((res) => {
       console.log("Res : "+res);
       this.service.getUserList().then((newdata) => {

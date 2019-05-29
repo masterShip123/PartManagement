@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Router } from '@angular/router';
 import { IndexService } from '../../../shared/index.service';
@@ -8,6 +8,8 @@ import { NbDialogService } from '@nebular/theme';
 import { FactoryAddComponent } from '../factory-add/factory-add.component';
 import { FactoryEditComponent } from '../factory-edit/factory-edit.component';
 import { FactoryViewComponent } from '../factory-view/factory-view.component';
+import { Observable, Subscription, timer } from 'rxjs';
+import { IdleTimeoutServiceService } from '../../../shared/idle-timeout-service.service';
 
 @Component({
   selector: 'ngx-factory',
@@ -15,6 +17,11 @@ import { FactoryViewComponent } from '../factory-view/factory-view.component';
   styleUrls: ['./factory.component.scss']
 })
 export class FactoryComponent implements OnInit {
+  public _counter: number = 0;
+  public _status: string = "Initialized.";
+  private _timer: Observable<number>;
+  private _timerSubscription: Subscription;
+  private _idleTimerSubscription: Subscription;
   settings = {
     actions : {
        add: false,
@@ -67,12 +74,20 @@ export class FactoryComponent implements OnInit {
   //private sele: string[];
   ngOnInit() {
     //this.sele = ["Flex"]
-    
+    this.startCounter();
+      this._idleTimerSubscription = this.idleTimeoutSvc.timeoutExpired.subscribe(res => {
+        localStorage.setItem('currentUser', null);
+        localStorage.setItem('passwordUser', null);
+        localStorage.setItem('sectionID', null);
+        //localStorage.removeItem('currentUser');
+        this.router.navigate(['./login']);
+      })
   }
   source: LocalDataSource = new LocalDataSource();
   currentUser : string
   constructor(private router: Router,public service: IndexService,public http: Http,private ser: SmartTableService,
-    private dialogService: NbDialogService) { 
+    private dialogService: NbDialogService,private changeRef: ChangeDetectorRef,
+    private idleTimeoutSvc: IdleTimeoutServiceService) { 
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.service.getLogin().subscribe((Response) =>{
         this.data = Response;
@@ -85,8 +100,21 @@ export class FactoryComponent implements OnInit {
     });
     
   }
- 
+  public startCounter() {
+    if (this._timerSubscription) {
+        this._timerSubscription.unsubscribe();
+    }
+
+    this._counter = 0;
+    this._timer = timer(1000, 1000);
+    this._timerSubscription = this._timer.subscribe(n => {
+        this._counter++;
+        this.changeRef.markForCheck();
+    });
+  }
   onCustom(event){
+    this.startCounter();
+    this.idleTimeoutSvc.resetTimer();
     localStorage.setItem('factory_ID', JSON.stringify(event.data.factory_ID));
     localStorage.setItem('factory_Name', JSON.stringify(event.data.factory_Name));
     localStorage.setItem('value1', JSON.stringify(event.data.value1));
@@ -118,6 +146,8 @@ export class FactoryComponent implements OnInit {
   }
   
   onAddUserlist(): void{
+    this.startCounter();
+    this.idleTimeoutSvc.resetTimer();
     this.dialogService.open(FactoryAddComponent).onClose.subscribe((res) => {
       console.log("Res : "+res);
       this.service.getFactoryList().then((newdata) => {

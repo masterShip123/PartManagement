@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Router } from '@angular/router';
 import { IndexService } from '../../../shared/index.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
+import { Observable, Subscription, timer } from 'rxjs';
+import { IdleTimeoutServiceService } from '../../../shared/idle-timeout-service.service';
 
 function emailDomainValidator(control: FormControl) {
   let email = control.value;
@@ -25,6 +27,11 @@ function emailDomainValidator(control: FormControl) {
   styleUrls: ['./maker-edit.component.scss']
 })
 export class MakerEditComponent implements OnInit {
+  public _counter: number = 0;
+  public _status: string = "Initialized.";
+  private _timer: Observable<number>;
+  private _timerSubscription: Subscription;
+  private _idleTimerSubscription: Subscription;
   maker_ID : string = "";
   maker_name : string = "";
   maker_contactName : string = "";
@@ -41,7 +48,8 @@ export class MakerEditComponent implements OnInit {
   registerForm: FormGroup;
   private data: string[];
   constructor(private router: Router,public service: IndexService,private fb: FormBuilder,protected ref: NbDialogRef<MakerEditComponent>,
-    private toastrService: NbToastrService,private formBuilder: FormBuilder) { 
+    private toastrService: NbToastrService,private formBuilder: FormBuilder,private changeRef: ChangeDetectorRef,
+    private idleTimeoutSvc: IdleTimeoutServiceService) { 
     
   }
 
@@ -75,14 +83,37 @@ export class MakerEditComponent implements OnInit {
     email: ['', [Validators.required, Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),emailDomainValidator]]
     
 });
+      this.startCounter();
+      this._idleTimerSubscription = this.idleTimeoutSvc.timeoutExpired.subscribe(res => {
+        localStorage.setItem('currentUser', null);
+        localStorage.setItem('passwordUser', null);
+        localStorage.setItem('sectionID', null);
+        //localStorage.removeItem('currentUser');
+        this.router.navigate(['./login']);
+      })
+  }
+  public startCounter() {
+    if (this._timerSubscription) {
+        this._timerSubscription.unsubscribe();
+    }
+
+    this._counter = 0;
+    this._timer = timer(1000, 1000);
+    this._timerSubscription = this._timer.subscribe(n => {
+        this._counter++;
+        this.changeRef.markForCheck();
+    });
   }
   cancel() {
+    this.startCounter();
+    this.idleTimeoutSvc.resetTimer();
     this.ref.close();
   }
   get f() { return this.registerForm.controls; }
   save(makername, contactName , lastName, tel
     , email, address, province, StatusValue){
-    
+      this.startCounter();
+      this.idleTimeoutSvc.resetTimer();
       this.service.putMakerList(this.maker_ID,makername,contactName,lastName,tel,email,address,province,StatusValue);
       // this.ref.close();
       this.service.getMakerLineList().then((data) => {

@@ -36,8 +36,18 @@ private islog:boolean = false;
           this.islog = true;  
          
        localStorage.setItem('currentUser', JSON.stringify(username));
+       localStorage.setItem('surname', JSON.stringify(this.tbUser[0].surname));
+       localStorage.setItem('Username', JSON.stringify(this.tbUser[0].name));
+       localStorage.setItem('sectionname', JSON.stringify(this.tbUser[0].sectionname));
+       localStorage.setItem('Useremail', JSON.stringify(this.tbUser[0].email));
        localStorage.setItem('passwordUser', JSON.stringify(password));
-       localStorage.setItem('sectionID', JSON.stringify(this.tbUser[0].userType_ID));
+       localStorage.setItem('sectionID', JSON.stringify(this.tbUser[0].section_ID));
+       if(this.tbUser[0].userType_ID == "UT4"){
+        localStorage.setItem('UseremailUT4', JSON.stringify(this.tbUser[0].email));
+        localStorage.setItem('passwordUserUT4', JSON.stringify(password));
+       }
+       localStorage.setItem('Usertype', JSON.stringify(this.tbUser[0].userType_ID));
+      
           this.router.navigate(['../pages']);
         }else{
           this.showM = true;
@@ -57,7 +67,7 @@ private islog:boolean = false;
 }
 
 interface user{
- 
+  sectionname: string;
     user_ID: string;
           userType_ID : string;
           section_ID : string;

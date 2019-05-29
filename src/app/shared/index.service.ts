@@ -32,6 +32,25 @@ export class IndexService {
   getLogin() {
     return this.http.get("http://localhost:62943/showTableWebService.asmx/GetLogin").map((res) => res.json());
   }
+  getRequestHeader(reID) {
+    return this.http.get("http://localhost:62943/showTableWebService.asmx/GetRequestHeader?request_ID="+reID).map((res) => res.json());
+  }
+  getRequestHeaderwhereDepartment(section_ID) {
+    return this.http.get("http://localhost:62943/showTableWebService.asmx/GetWhereRequestHeaderForDepartMent?section_ID="+section_ID).map((res) => res.json());
+  }
+  // getRequestHeader(): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       //resolve(this.smartTableData);
+  //       this.http.get("http://localhost:62943/showTableWebService.asmx/GetRequestHeader",{
+  //         }).subscribe((res: Response) => {
+  //           this.rows = res.json();
+  //           resolve(this.rows);
+  //             }, (error: any) => {
+  //           });
+  //     });
+  //   });
+  // }
   getwherelogin(username,password){
     this.user = username;
     return this.http.get('http://localhost:62943/showTableWebService.asmx/GetWhereLogin?username='+username+'&password='+password).map((res) => res.json());

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Router } from '@angular/router';
 import { IndexService } from '../../../shared/index.service';
@@ -9,6 +9,8 @@ import { SectionAddComponent } from '../section-add/section-add.component';
 import { user, sectionList } from '../../../shared/index.model';
 import { SectionEditComponent } from '../section-edit/section-edit.component';
 import { SectionViewComponent } from '../section-view/section-view.component';
+import { Observable, Subscription, timer } from 'rxjs';
+import { IdleTimeoutServiceService } from '../../../shared/idle-timeout-service.service';
 
 @Component({
   selector: 'ngx-section',
@@ -16,6 +18,11 @@ import { SectionViewComponent } from '../section-view/section-view.component';
   styleUrls: ['./section.component.scss']
 })
 export class SectionComponent implements OnInit {
+  public _counter: number = 0;
+  public _status: string = "Initialized.";
+  private _timer: Observable<number>;
+  private _timerSubscription: Subscription;
+  private _idleTimerSubscription: Subscription;
   settings = {
     actions : {
        add: false,
@@ -74,11 +81,20 @@ export class SectionComponent implements OnInit {
   ngOnInit() {
     //this.sele = ["Flex"]
     
+    this.startCounter();
+    this._idleTimerSubscription = this.idleTimeoutSvc.timeoutExpired.subscribe(res => {
+      localStorage.setItem('currentUser', null);
+      localStorage.setItem('passwordUser', null);
+      localStorage.setItem('sectionID', null);
+      //localStorage.removeItem('currentUser');
+      this.router.navigate(['./login']);
+    })
   }
   source: LocalDataSource = new LocalDataSource();
   currentUser : string
   constructor(private router: Router,public service: IndexService,public http: Http,private ser: SmartTableService,
-    private dialogService: NbDialogService) { 
+    private dialogService: NbDialogService,private changeRef: ChangeDetectorRef,
+    private idleTimeoutSvc: IdleTimeoutServiceService) { 
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.service.getLogin().subscribe((Response) =>{
         this.data = Response;
@@ -91,8 +107,21 @@ export class SectionComponent implements OnInit {
     });
     
   }
- 
+  public startCounter() {
+    if (this._timerSubscription) {
+        this._timerSubscription.unsubscribe();
+    }
+
+    this._counter = 0;
+    this._timer = timer(1000, 1000);
+    this._timerSubscription = this._timer.subscribe(n => {
+        this._counter++;
+        this.changeRef.markForCheck();
+    });
+  }
   onCustom(event){
+    this.startCounter();
+    this.idleTimeoutSvc.resetTimer();
     localStorage.setItem('section_ID', JSON.stringify(event.data.section_ID));
     localStorage.setItem('section_name', JSON.stringify(event.data.section_name));
     localStorage.setItem('dept_name', JSON.stringify(event.data.dept_name));
@@ -130,7 +159,8 @@ export class SectionComponent implements OnInit {
   }
   
   onAddUserlist(): void{
-      
+    this.startCounter();
+    this.idleTimeoutSvc.resetTimer();
     this.dialogService.open(SectionAddComponent).onClose.subscribe((res) => {
       console.log("Res : "+res);
       this.service.getSectionList().then((newdata) => {
