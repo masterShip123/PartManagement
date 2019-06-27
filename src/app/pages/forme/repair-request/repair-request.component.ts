@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { EmailService } from '../../../shared/email.service';
 import { Observable, Subscription, timer } from 'rxjs';
 import { IdleTimeoutServiceService } from '../../../shared/idle-timeout-service.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -33,7 +33,29 @@ export class RepairRequestComponent implements OnInit {
   today: number = Date.now();
   requestno: String = "";
   private tbrequestHeader:requestHeader[];
-  constructor(private router: Router,public service: IndexService,private datePipe: DatePipe,private _emailService: EmailService,private changeRef: ChangeDetectorRef,
+  public imagePath;
+  imgURL: any;
+  public message: string;
+  request_date: string = "";
+  request_by: string = "";
+   perMission: string = "";
+  // requestPersonAvailable: boolean = true;
+  section_d: string = "";
+  urls : Array<any> = [];
+  id : number = 0;
+  showRequestPerson: boolean = false;
+  requTypeName: string = "";  
+  valueTextArea: string = "";
+  statusShowHTML: string = "";
+  requestNoShowHTML: string = "";
+  requesttimeShowHTML: string = "";
+  requestTypeShowHTML: number = 0;
+  requestTypeShowHTMLValue: string = "";
+  requestTypeShowHTMLValueID: string = "";
+  locationShowHTMLValueID: string = "";
+  locationShowHTMLValue: string = "";
+  private sub: any;
+  constructor(private route: ActivatedRoute,private router: Router,public service: IndexService,private datePipe: DatePipe,private _emailService: EmailService,private changeRef: ChangeDetectorRef,
     private idleTimeoutSvc: IdleTimeoutServiceService) {
     this.formImport = new FormGroup({
       importFile: new FormControl('', Validators.required)
@@ -42,14 +64,76 @@ export class RepairRequestComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this._emailService.test);
-    console.log(JSON.parse(localStorage.getItem('sectionID')));
+    this.service.getDataMicApplication();
+    this.service.getDataRequestType();
+    this.service.getDataLocation();
+    //รับพารามิเตอร์จาก URL
+    this.sub = this.route.params.subscribe(params => {
+      this.id = +params['id']; // (+) converts string 'id' to a number
+      if(params['id'] == "0"){
+        this.requestTypeShowHTML = 0;
+      //  this.statusShowHTML = this.service.listmicApplication[0].value1;
+      this.statusShowHTML = "Create";
+       console.log("ShowSTATUS: "+this.statusShowHTML);
+        this.valueTextArea = "";
+        this.requestNoShowHTML = "";
+        this.requesttimeShowHTML = "";
+         // SetPermission///////////////////////////////////////
+          this.perMission = JSON.parse(localStorage.getItem('Usertype'));
+          //////////////////////////////////////////////////////////////////
+         
+          var sectionName = JSON.parse(localStorage.getItem('sectionname'))
+          this.section_d = sectionName;
+          var  requstBy = JSON.parse(localStorage.getItem('Username'))+" "+JSON.parse(localStorage.getItem('surname'))
+          this.request_by = requstBy;
+          var  requestDate = this.datePipe.transform(this.today, 'yyyy-MM-dd');
+          this.request_date = requestDate;
+          console.log("RequstFrom: "+requestDate);
+
+          console.log(this._emailService.test);
+          console.log("Section  : "+JSON.parse(localStorage.getItem('sectionID')));
+      }else{
+        this.service.getRequestHeaderwhereID(params['id']).subscribe((Response) => {
+          this.requestNoShowHTML = params['id'];
+          this.tbrequestHeader = Response; 
+          this.request_date = this.tbrequestHeader[0].informDate;
+          this.requesttimeShowHTML = this.tbrequestHeader[0].informTime;
+          this.request_by = this.tbrequestHeader[0].user_ID;
+          this.section_d = JSON.parse(localStorage.getItem('sectionname'));
+          
+          for(let index = 0;index< this.service.listmicApplication.length;index++){
+            // console.log(this.tbrequestHeader[0].status+" : == : "+this.service.listmicApplication[index].misc_code)
+            if(this.service.listmicApplication[index].misc_code == this.tbrequestHeader[0].status){
+              this.statusShowHTML = this.service.listmicApplication[index].value1;
+            }
+          }
+          this.requestTypeShowHTML = 1;
+          for(let index = 0;index< this.service.listrequestTypeList.length;index++){
+              if(this.service.listrequestTypeList[index].requestType_ID == this.tbrequestHeader[0].requestType_ID){
+                this.requestTypeShowHTMLValueID = this.service.listrequestTypeList[index].requestType_ID;
+                 this.requestTypeShowHTMLValue = this.service.listrequestTypeList[index].requestType_Name;
+              }
+          }
+          for(let index =0; index<this.service.listLocation.length;index++){
+            if(this.service.listLocation[index].location_ID == this.tbrequestHeader[0].location_ID){
+              this.locationShowHTMLValueID = this.service.listLocation[index].location_ID;
+              this.locationShowHTMLValue = this.service.listLocation[index].location_name;
+            }
+          }
+          this.valueTextArea = this.tbrequestHeader[0].beforeDetail;
+        });
+       
+      }
+      console.log(this.id+" == ID")
+     });
+   
     this.startCounter();
   this._idleTimerSubscription = this.idleTimeoutSvc.timeoutExpired.subscribe(res => {
     localStorage.setItem('currentUser', null);
     localStorage.setItem('passwordUser', null);
     localStorage.setItem('sectionID', null);
     //localStorage.removeItem('currentUser');
+    
     this.router.navigate(['./login']);
   })
   }
@@ -71,10 +155,30 @@ export class RepairRequestComponent implements OnInit {
     this.empList = [];
     this.empList.length = 0;
     this.filename = "";
+   
+    this.imagePath = files;
+   
+    this.urls = [];
+    
     console.log("Log : "+files.length);
+    for(let file of this.imagePath){
+      var reader = new FileReader();
+      let tablefilename = new tableFilename();
+      reader.onload = (files: any) => {
+        // this.imgURL = reader.result; 
+        this.imgURL = files.target.result;
+        this.urls.push(this.imgURL);
+        console.log(this.urls);
+      }
+            reader.readAsDataURL(file);
+
+    }
     for(var  i = 0 ; i < files.length; i++){
+    
       let tablefilename = new tableFilename();
       tablefilename.name = files.item(i).name;
+      
+       
       this.empList.push(tablefilename);
     }
     for (let index = 0; index < this.empList.length; index++) {
@@ -95,10 +199,9 @@ export class RepairRequestComponent implements OnInit {
     this.idleTimeoutSvc.resetTimer();
     this.filename = "";
     this.empList.splice(index, 1);
-
+    console.log("Index : "+index);
     // console.log(this.empList.length);
     for (let index = 0; index < this.empList.length; index++) {
-     
       if(index == this.empList.length-1){
         this.filename = this.filename+this.empList[index].name;
       }else{
@@ -108,7 +211,14 @@ export class RepairRequestComponent implements OnInit {
     console.log("Name : "+this.filename )
   
 }
-createRequest(){
+createRequest(requestTypess,locationList,beforeDetail){
+  for(let index = 0 ;index<this.service.listrequestTypeList.length;index++){
+    if(this.service.listrequestTypeList[index].requestType_ID == requestTypess){
+      this.requTypeName = this.service.listrequestTypeList[index].requestType_Name;
+    }
+  }
+  this.showRequestPerson = true;
+  var  requestTime = this.datePipe.transform(this.today, 'HH:mm:ss');
   this.startCounter();
     this.idleTimeoutSvc.resetTimer();
   var sectionEmail = new Array();
@@ -131,14 +241,44 @@ createRequest(){
       count = count;
     }
     this.requestno =  this.requestno + count;
-    console.log( this.requestno);
     
+    console.log( this.requestno);
+    //Insert RequestPicture
+  let splitFilename = this.filename.split(",");
+  if(splitFilename.length >0){
+    console.log("ImageLangth : "+this.imagePath.length);
+    for(let index = 0;index<this.imagePath.length;index++){
+      var beforPicture = "Before"+this.requestno+"_"+index;
+       this.service.postDataRequestPicture(beforPicture,this.requestno,splitFilename[index],1,1)
+    }
+  }else{
+    for(let index = 0;index<this.imagePath.length;index++){
+      var beforPicture = "Before"+this.requestno+"_"+index;
+       this.service.postDataRequestPicture(beforPicture,this.requestno,this.filename,1,1)
+    }
+  }
+  console.log(this.requestno+"  "+this.request_by+"  "+this.service.listmicApplication[0].misc_code);
+  var statusInsert = +this.service.listmicApplication[0].misc_code + 1;
+  //Insert RequsetHeadder
+  this.service.postDataRequestHeader(this.requestno,
+    this.request_date,
+    requestTime,
+    this.request_by
+    ,JSON.parse(localStorage.getItem('sectionID')),
+    statusInsert,
+    requestTypess,
+    locationList,
+    beforeDetail,
+    this.request_by,
+    this.request_by
+    ,this.request_by);
+   
   })
+  
   localStorage.setItem('requestnoSection', JSON.stringify(this.requestno));
-  const  requestDate = this.datePipe.transform(this.today, 'yyyy-MM-dd');
+  
   const  requstTime = this.datePipe.transform(this.today, 'HH:mm:ss');
-  var  requstBy = JSON.parse(localStorage.getItem('Username'))+" "+JSON.parse(localStorage.getItem('surname'))
-  var sectionName = JSON.parse(localStorage.getItem('sectionname'))
+  
   splitUserTypeLogin = JSON.parse(localStorage.getItem('Usertype')).split("UT");
 
   this.service.getRequestHeaderwhereDepartment(JSON.parse(localStorage.getItem('sectionID'))).subscribe((Response) => {
@@ -155,11 +295,14 @@ createRequest(){
 
       console.log("sectionEmail : "+sectionEmail);
   var user = {
-    requestno: JSON.parse(localStorage.getItem('requestnoSection')),
+    requestno: this.requestno,
     formEmail : JSON.parse(localStorage.getItem('UseremailUT4')),
     userPassword: JSON.parse(localStorage.getItem('passwordUserUT4')),
     lengthEmail: sectionEmail.length,
     sendToemail: sectionEmail,
+    approveOrCancel: "Approve",
+    requestyp: this.requTypeName,
+    link: "http://localhost:4200/#/pages/forme/repair/"+this.requestno
   }
   console.log("User : "+user.sendToemail);
   console.log("UserlengthEmail : "+user.lengthEmail);
@@ -174,6 +317,9 @@ createRequest(){
         console.log(err);
       }
     );  
+
+    
   })
+
 }
 }

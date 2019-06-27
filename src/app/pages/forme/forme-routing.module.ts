@@ -8,7 +8,8 @@ const routes: Routes = [{
   component: FormeComponent,
   children: [
   {
-    path: 'repair',
+    // ส่งค่าผ่าน พารามิเตอผ่าน URL
+    path: 'repair/:id',
     component: RepairRequestComponent,
   },
   // {

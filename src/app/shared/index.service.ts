@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs';
 import { Response } from '@angular/http';
-import { sectionList, miscdataList, userTypeList, user, departmentList, FactoryList, ProductionLineList, ProvinceList, unitTypeList, locationList, makerList, moldTypeList, partMasterList } from './index.model';
+import { sectionList, miscdataList, userTypeList, user, departmentList, FactoryList, ProductionLineList, ProvinceList, unitTypeList, locationList, makerList, moldTypeList, partMasterList, requestTypeList } from './index.model';
 import { HttpClient } from "@angular/common/http";
 
 
@@ -12,6 +12,8 @@ export class IndexService {
 
  list: sectionList[];
  listmic: miscdataList[];
+ listmicApplication: miscdataList[];
+ listrequestTypeList: requestTypeList[];
  listmicPartStock : miscdataList[];
  listTiming: miscdataList[];
  listPastStock: partMasterList[];
@@ -34,6 +36,9 @@ export class IndexService {
   }
   getRequestHeader(reID) {
     return this.http.get("http://localhost:62943/showTableWebService.asmx/GetRequestHeader?request_ID="+reID).map((res) => res.json());
+  }
+  getRequestHeaderwhereID(reID) {
+    return this.http.get("http://localhost:62943/showTableWebService.asmx/GetRequestHeaderwhereID?request_ID="+reID).map((res) => res.json());
   }
   getRequestHeaderwhereDepartment(section_ID) {
     return this.http.get("http://localhost:62943/showTableWebService.asmx/GetWhereRequestHeaderForDepartMent?section_ID="+section_ID).map((res) => res.json());
@@ -573,6 +578,16 @@ export class IndexService {
     this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbmMiscDataList")
     .toPromise().then(res => this.listmic = res as miscdataList[]);
   }
+  getDataMicApplication(){
+    // return this.http.get("http://localhost:62943/showTableWebService.asmx/GetSectionList").map((res) => res.json());
+    this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbmMiscDataListApplication")
+    .toPromise().then(res => this.listmicApplication = res as miscdataList[]);
+  }
+  getDataRequestType(){
+    // return this.http.get("http://localhost:62943/showTableWebService.asmx/GetSectionList").map((res) => res.json());
+    this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetRequestType")
+    .toPromise().then(res => this.listrequestTypeList = res as requestTypeList[]);
+  }
   getDataMicPartStock(){
     // return this.http.get("http://localhost:62943/showTableWebService.asmx/GetSectionList").map((res) => res.json());
     this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbmMiscPartStockDataList")
@@ -624,6 +639,43 @@ export class IndexService {
           return this.http.get('http://localhost:62943/showTableWebService.asmx/InsertSection?department='+department
           +'&sectionid='+sectionid+'&sectionname='+sectionname
           +'&StatusValue='+StatusValue,{
+                }).subscribe((res: Response) => {
+                  
+                }, (error: any) => {
+              })
+       
+      });
+    });
+  }
+  postDataRequestPicture(attachfile_ID,request_ID,attachfile_desc,timing,activeFlag): Promise<any> {
+    
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+          return this.http.get('http://localhost:62943/showTableWebService.asmx/InsertRequestPicture?attachfile_ID='+attachfile_ID
+          +'&request_ID='+request_ID+'&attachfile_desc='+attachfile_desc
+          +'&timing='+timing+'&activeFlag='+activeFlag,{
+                }).subscribe((res: Response) => {
+                  
+                }, (error: any) => {
+              })
+       
+      });
+    });
+  }
+  postDataRequestHeader(request_no,request_date,request_time,request_by,section,status,
+    request_Type,location_Process,before_Problem,request_Person,section_Approve,repair_section_approve
+    ): Promise<any> {
+    
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+          return this.http.get('http://localhost:62943/showTableWebService.asmx/InsertRequestHeader?request_no='+request_no
+          +'&request_date='+request_date+'&request_time='+request_time
+          +'&request_by='+request_by+'&section='+section+'&request_by='+request_by
+          +'&status='+status+'&request_Type='+request_Type+'&location_Process='+location_Process
+          +'&before_Problem='+before_Problem+'&request_Person='+request_Person
+          +'&section_Approve='+section_Approve+'&repair_section_approve='+repair_section_approve,{
                 }).subscribe((res: Response) => {
                   
                 }, (error: any) => {

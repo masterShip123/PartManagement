@@ -27,6 +27,7 @@ export class miscdataList{
 }
 
 
+
 export class userTypeList{
     userType_ID : string;
         userType_name : string;
@@ -146,6 +147,8 @@ export class tableFilename
 
 export class requestHeader{
   count : number;
+  informDate: string;
+  informTime: string;
  request_ID: string;
    requestType_ID : string;
    user_ID: string;

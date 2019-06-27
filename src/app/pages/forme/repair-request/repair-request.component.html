@@ -12,20 +12,20 @@
       <div class="col-md-4">
         <div class="form-group">
           <label for="inputFirstName">Request no </label>
-          <input type="text" class="form-control" id="requestno" placeholder="CheckTool ID" #requestno disabled>
+          <input type="text" class="form-control" id="requestno" value="{{requestNoShowHTML}}" #requestno disabled>
         
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="inputLastName">Request date</label>
-          <input type="text" class="form-control" id="requestdate" placeholder="CheckTool Name" #requestdate disabled>
+          <input type="text" class="form-control" id="requestdate" value="{{request_date}}" #requestdate disabled>
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="inputLastName">Request time</label>
-          <input type="text" class="form-control" id="requesttime" placeholder="CheckTool Name" #requesttime disabled>
+          <input type="text" class="form-control" id="requesttime" value="{{requesttimeShowHTML}}" #requesttime disabled>
         </div>
       </div>
     </div>
@@ -34,20 +34,20 @@
       <div class="col-md-4">
         <div class="form-group">
           <label for="inputFirstName">Request by</label>
-          <input type="text" class="form-control" id="requestby" placeholder="CheckTool ID" #requestby disabled>
+          <input type="text" class="form-control" id="requestby" value="{{request_by}}" #requestby disabled>
         
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="inputLastName">Section</label>
-          <input type="text" class="form-control" id="section" placeholder="CheckTool Name" #section disabled>
+          <input type="text" class="form-control" id="section" value="{{section_d}}" #section disabled>
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
-          <label for="inputLastName">Department</label>
-          <input type="text" class="form-control" id="department" placeholder="CheckTool Name" #department disabled>
+          <label for="inputLastName">Status</label>
+          <input type="text" class="form-control" id="status" value="{{statusShowHTML}}" #statuse disabled>
         </div>
       </div>
     </div>
@@ -64,8 +64,13 @@
                   <div class="col-sm-6">
                       <div class="form-group">
                         <label for="inputWebsite">Request Type</label>
-                        <select class="form-control"  id="Status" #StatusValue>
-                            <!-- <option   *ngFor= "let micdatas of service.listmic"  value="{{micdatas.misc_code}}">{{micdatas.value1}}</option>    -->
+                        <select class="form-control"  id="Status" #requestTypess>
+                            <ng-container *ngIf="requestTypeShowHTML == 0">
+                                <option   *ngFor= "let requestTypes of service.listrequestTypeList"  value="{{requestTypes.requestType_ID}}">{{requestTypes.requestType_Name}}</option>
+                            </ng-container>
+                            <ng-container  *ngIf="requestTypeShowHTML == 1">
+                                <option    value="{{requestTypeShowHTMLValueID}}">{{requestTypeShowHTMLValue}}</option>
+                            </ng-container>
                           </select>
                       </div>
                     </div>
@@ -73,8 +78,14 @@
                         <div class="form-group">
                           <label for="inputWebsite">Location / Process</label>
                           <div class="form-group">
-                            <select class="form-control"  id="Status" #StatusValue>
-                              <!-- <option   *ngFor= "let micdatas of service.listmic"  value="{{micdatas.misc_code}}">{{micdatas.value1}}</option>    -->
+                            <select class="form-control"  id="location" #locationList>
+                                <ng-container *ngIf="requestTypeShowHTML == 0">
+                                    <option   *ngFor= "let Locations of service.listLocation"  value="{{Locations.location_ID}}">{{Locations.location_name}}</option>   
+                                </ng-container>
+                                <ng-container *ngIf="requestTypeShowHTML == 1">
+                                    <option   value="{{locationShowHTMLValueID}}">{{locationShowHTMLValue}}</option> 
+                                </ng-container>
+                                
                             </select>
                           </div> 
                         </div>
@@ -83,7 +94,7 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                       <label for="inputLastName">Befor Problem Description (รายละเอียดปัญหาก่อนแก้ไข)</label>
-                      <textarea rows="5" nbInput fullWidth shape="round"  placeholder="Address" #address></textarea>
+                      <textarea rows="5" nbInput fullWidth shape="round"  #beforeDetail>{{valueTextArea}}</textarea>
                     </div>
                   </div>
               
@@ -110,7 +121,7 @@
                    </div> -->
                   
                    <div class="col-sm-12">
-                      <input type="file" multiple class="form-control-file" id="importFile" (change)="onFileChange($event.target.files)">
+                      <input type="file" multiple class="form-control-file"  id="importFile" (change)="onFileChange($event.target.files)">
                           <nb-card class="list-card" size="small">
                               <nb-card-body>
                                   <form>
@@ -123,15 +134,18 @@
                                                 <tr>
                                                   <th>Name</th>
                                                   <th>Actions</th>
+                                                  <th>Image</th>
                                                 </tr>
                                               </thead>
                                               <tbody>
-                                                <tr *ngFor="let empLists of empList ; let i = index">
+                                                <tr *ngFor="let empLists of empList ; let i = index;">
                                                   <td>{{empLists.name}}</td>
                                                   <td><button type="button" class="btn btn-danger btn-xs"
                                                     (click)="removeLanguague(empLists, i)">
                                                   <span class="glyphicon glyphicon-trash"></span> Remove
                                                    </button></td>
+                                                   <td><img src='{{urls[i]}}' class="rounded mb-3" width="180">
+                                                  </td>
                                                 </tr>
                                               </tbody>
                                             </table>
@@ -150,12 +164,12 @@
                           <nb-card>
                               <nb-card-header>Request person</nb-card-header>
                               <nb-card-body>
-                                <form>
+                                <form >
                                   <div class="form-group">
-                                      <label >Choose file</label>   
+                                      <label *ngIf="showRequestPerson">{{request_by}}</label>   
                                   </div>
-                                  <button nbButton status="success" (click)="createRequest()">Create</button>
-                                  <button nbButton status="danger"  (click)="cancel()">Cancel</button>
+                                  <button [disabled]="!(perMission == 'UT4')" nbButton status="success" (click)="createRequest(requestTypess.value,locationList.value,beforeDetail.value)">Create</button>
+                                  <!-- <button [disabled]="!(perMission == 'UT4')" nbButton status="danger"  (click)="cancel()">Cancel</button> -->
                                  
                                 </form>
                               </nb-card-body>
@@ -166,26 +180,26 @@
                           <nb-card>
                               <nb-card-header>Section Approve (LD Up)</nb-card-header>
                               <nb-card-body>
-                                <form>
+                                <form >
                                   <div class="form-group">
-                                      <label >Choose file</label>   
+                                      <!-- <label >Choose file</label>    -->
                                   </div>
-                                  <button type="submit" class="btn btn-success">Create</button>
-                                  <button nbButton status="danger"  (click)="cancel()">Cancel</button>
+                                  <button [disabled]="!(perMission == 'UT5')" type="submit" class="btn btn-success">Create</button>
+                                  <button [disabled]="!(perMission == 'UT5')" nbButton status="danger"  (click)="cancel()">Cancel</button>
                                 </form>
                               </nb-card-body>
                             </nb-card>
                        </div>
-                       <div class="col-md-4">
+                       <div class="col-md-4" >
                           <nb-card>
                               <nb-card-header>Repair section Approve (ACH Up)</nb-card-header>
                               <nb-card-body>
-                                <form>
+                                <form >
                                   <div class="form-group">
-                                      <label >Choose file</label>   
+                                      <!-- <label >Choose file</label>    -->
                                   </div>
-                                  <button type="submit" class="btn btn-success">Create</button>
-                                  <button nbButton status="danger"  (click)="cancel()">Cancel</button>
+                                  <button [disabled]="!(perMission == 'UT1')" type="submit" class="btn btn-success">Create</button>
+                                  <button [disabled]="!(perMission == 'UT1')" nbButton status="danger"  (click)="cancel()">Cancel</button>
                                 </form>
                               </nb-card-body>
                             </nb-card>

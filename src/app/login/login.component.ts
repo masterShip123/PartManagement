@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from './login.service';
 import { IndexService } from '../shared/index.service';
-
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'ngx-login',
@@ -12,6 +12,12 @@ import { IndexService } from '../shared/index.service';
 export class LoginComponent implements OnInit {
   private tbUser:user[];
   showM: boolean = true;
+  plainText:string;  
+  encryptText: string;  
+  encPassword: string;  
+  decPassword:string;  
+  conversionEncryptOutput: string;  
+  conversionDecryptOutput:string;  
   constructor(private router: Router,private serin: IndexService) {
     this.serin.getLogin().subscribe((Response) => {
      this.tbUser = Response;
@@ -19,6 +25,34 @@ export class LoginComponent implements OnInit {
    
  
 }
+// //The set method is use for encrypt the value.
+// set(keys, value){
+//   var key = CryptoJS.enc.Utf8.parse(keys);
+//   var iv = CryptoJS.enc.Utf8.parse(keys);
+//   var encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(value.toString()), key,
+//   {
+//       keySize: 128 / 8,
+//       iv: iv,
+//       mode: CryptoJS.mode.CBC,
+//       padding: CryptoJS.pad.Pkcs7
+//   });
+
+//   return encrypted.toString();
+// }
+
+// //The get method is use for decrypt the value.
+// get(keys, value){
+//   var key = CryptoJS.enc.Utf8.parse(keys);
+//   var iv = CryptoJS.enc.Utf8.parse(keys);
+//   var decrypted = CryptoJS.AES.decrypt(value, key, {
+//       keySize: 128 / 8,
+//       iv: iv,
+//       mode: CryptoJS.mode.CBC,
+//       padding: CryptoJS.pad.Pkcs7
+//   });
+
+//   return decrypted.toString(CryptoJS.enc.Utf8);
+// }
 private islog:boolean = false;
   ngOnInit() {
     if(JSON.parse(localStorage.getItem('currentUser')) != null){
@@ -27,6 +61,7 @@ private islog:boolean = false;
     this.showM = false;
   }
   checkLogin(username,password){
+    
     this.serin.getwherelogin(username,password).subscribe((Response) => {
       //console.log("Ship : "+Response.user_name); 
       this.tbUser = Response; 

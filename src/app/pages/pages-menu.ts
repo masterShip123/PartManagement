@@ -76,7 +76,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Repair and Rebuild Request',
-        link: '/pages/forme/repair',
+        link: '/pages/forme/repair/0',
       },
       // {
       //   title: 'Form Layouts',
