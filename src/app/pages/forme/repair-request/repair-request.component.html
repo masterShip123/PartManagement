@@ -64,12 +64,12 @@
                   <div class="col-sm-6">
                       <div class="form-group">
                         <label for="inputWebsite">Request Type</label>
-                        <select class="form-control"  id="Status" #requestTypess>
+                        <select [disabled]="disableCreate" class="form-control"  id="Status" #requestTypess>
                             <ng-container *ngIf="requestTypeShowHTML == 0">
                                 <option   *ngFor= "let requestTypes of service.listrequestTypeList"  value="{{requestTypes.requestType_ID}}">{{requestTypes.requestType_Name}}</option>
                             </ng-container>
                             <ng-container  *ngIf="requestTypeShowHTML == 1">
-                                <option    value="{{requestTypeShowHTMLValueID}}">{{requestTypeShowHTMLValue}}</option>
+                                <option   value="{{requestTypeShowHTMLValueID}}">{{requestTypeShowHTMLValue}}</option>
                             </ng-container>
                           </select>
                       </div>
@@ -78,9 +78,9 @@
                         <div class="form-group">
                           <label for="inputWebsite">Location / Process</label>
                           <div class="form-group">
-                            <select class="form-control"  id="location" #locationList>
+                            <select [disabled]="disableCreate" class="form-control"  id="location" #locationList>
                                 <ng-container *ngIf="requestTypeShowHTML == 0">
-                                    <option   *ngFor= "let Locations of service.listLocation"  value="{{Locations.location_ID}}">{{Locations.location_name}}</option>   
+                                    <option  *ngFor= "let Locations of service.listLocation"  value="{{Locations.location_ID}}">{{Locations.location_name}}</option>   
                                 </ng-container>
                                 <ng-container *ngIf="requestTypeShowHTML == 1">
                                     <option   value="{{locationShowHTMLValueID}}">{{locationShowHTMLValue}}</option> 
@@ -94,7 +94,7 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                       <label for="inputLastName">Befor Problem Description (รายละเอียดปัญหาก่อนแก้ไข)</label>
-                      <textarea rows="5" nbInput fullWidth shape="round"  #beforeDetail>{{valueTextArea}}</textarea>
+                      <textarea [disabled]="disableCreate" rows="5" nbInput fullWidth shape="round"  #beforeDetail>{{valueTextArea}}</textarea>
                     </div>
                   </div>
               
@@ -121,7 +121,7 @@
                    </div> -->
                   
                    <div class="col-sm-12">
-                      <input type="file" multiple class="form-control-file"  id="importFile" (change)="onFileChange($event.target.files)">
+                      <input [disabled]="disableCreate" type="file" multiple class="form-control-file"  id="importFile" (change)="onFileChange($event.target.files)">
                           <nb-card class="list-card" size="small">
                               <nb-card-body>
                                   <form>
@@ -144,7 +144,7 @@
                                                     (click)="removeLanguague(empLists, i)">
                                                   <span class="glyphicon glyphicon-trash"></span> Remove
                                                    </button></td>
-                                                   <td><img src='{{urls[i]}}' class="rounded mb-3" width="180">
+                                                   <td><img src='{{urls[i]}}'  (click)="open(i)" class="rounded mb-3 pointer" width="180" height="180">
                                                   </td>
                                                 </tr>
                                               </tbody>

@@ -32,11 +32,12 @@ export class ChangpasswordComponent implements OnInit {
 
   ngOnInit() {
     this.userName = JSON.parse(localStorage.getItem('currentUser'));
+    this.password = JSON.parse(localStorage.getItem('passwordUser'));
     this.service.getUserview(this.userName).subscribe((Response) => {
       this.tbUser = Response; 
         console.log("Test :"+JSON.stringify(this.tbUser[0].user_password));
-         localStorage.setItem('passwordUser', JSON.stringify(this.tbUser[0].user_password));
-        this.password = JSON.parse(localStorage.getItem('passwordUser'));
+        //  localStorage.setItem('passwordUser', JSON.stringify(this.tbUser[0].user_password));
+        // this.password = JSON.parse(localStorage.getItem('passwordUser'));
     }) 
     this.startCounter();
   this._idleTimerSubscription = this.idleTimeoutSvc.timeoutExpired.subscribe(res => {

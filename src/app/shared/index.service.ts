@@ -667,12 +667,12 @@ export class IndexService {
     request_Type,location_Process,before_Problem,request_Person,section_Approve,repair_section_approve
     ): Promise<any> {
     
-
+   console.log("RequestBy:  "+request_by)
     return new Promise((resolve, reject) => {
       setTimeout(() => {
           return this.http.get('http://localhost:62943/showTableWebService.asmx/InsertRequestHeader?request_no='+request_no
           +'&request_date='+request_date+'&request_time='+request_time
-          +'&request_by='+request_by+'&section='+section+'&request_by='+request_by
+          +'&request_by='+request_by+'&section='+section
           +'&status='+status+'&request_Type='+request_Type+'&location_Process='+location_Process
           +'&before_Problem='+before_Problem+'&request_Person='+request_Person
           +'&section_Approve='+section_Approve+'&repair_section_approve='+repair_section_approve,{

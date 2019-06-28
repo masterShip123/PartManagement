@@ -18,6 +18,7 @@ import { IconsComponent } from '../ui-features/icons/icons.component';
 import { TypographyComponent } from '../ui-features/typography/typography.component';
 import { SearchComponent } from '../maps/search-map/search/search.component';
 import { EmailService } from '../../shared/email.service';
+import { LightboxModule } from 'ngx-lightbox';
 
 const COMPONENTS = [
   FormeComponent,
@@ -36,6 +37,7 @@ const MODULES = [
   Ng2SmartTableModule,
   ReactiveFormsModule,
     FormsModule,
+    LightboxModule
  
 ];
 

@@ -75,7 +75,7 @@ private islog:boolean = false;
        localStorage.setItem('Username', JSON.stringify(this.tbUser[0].name));
        localStorage.setItem('sectionname', JSON.stringify(this.tbUser[0].sectionname));
        localStorage.setItem('Useremail', JSON.stringify(this.tbUser[0].email));
-       localStorage.setItem('passwordUser', JSON.stringify(password));
+       localStorage.setItem('passwordUser', JSON.stringify(this.tbUser[0].user_password));
        localStorage.setItem('sectionID', JSON.stringify(this.tbUser[0].section_ID));
        if(this.tbUser[0].userType_ID == "UT4"){
         localStorage.setItem('UseremailUT4', JSON.stringify(this.tbUser[0].email));

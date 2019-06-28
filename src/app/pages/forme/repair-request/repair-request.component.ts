@@ -7,7 +7,9 @@ import { EmailService } from '../../../shared/email.service';
 import { Observable, Subscription, timer } from 'rxjs';
 import { IdleTimeoutServiceService } from '../../../shared/idle-timeout-service.service';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import { NbToastrService, NbGlobalPosition, NbGlobalPhysicalPosition } from '@nebular/theme';
+import { NbToastStatus } from '@nebular/theme/components/toastr/model';
+import { LightboxModule, Lightbox } from 'ngx-lightbox';
 
 @Component({
   selector: 'ngx-repair-request',
@@ -54,8 +56,26 @@ export class RepairRequestComponent implements OnInit {
   requestTypeShowHTMLValueID: string = "";
   locationShowHTMLValueID: string = "";
   locationShowHTMLValue: string = "";
+  //DeclareShowError
+  destroyByClick = true;
+  duration = 2000;
+  hasIcon = true;
+  position: NbGlobalPosition = NbGlobalPhysicalPosition.TOP_RIGHT;
+  preventDuplicates = false;
+  status: NbToastStatus = NbToastStatus.DANGER;
+  title = 'BeforeDetail Required';
+  content = ``;
+  leangthFileForInsert: number = 0;
+  disableCreate: boolean = false;
+  //////////////////
   private sub: any;
-  constructor(private route: ActivatedRoute,private router: Router,public service: IndexService,private datePipe: DatePipe,private _emailService: EmailService,private changeRef: ChangeDetectorRef,
+  private _album: Array<any> = [];
+  constructor(private _lightbox: Lightbox,
+    private toastrService: NbToastrService,
+    private route: ActivatedRoute,private router: Router,
+    public service: IndexService,private datePipe: DatePipe,
+    private _emailService: EmailService,
+    private changeRef: ChangeDetectorRef,
     private idleTimeoutSvc: IdleTimeoutServiceService) {
     this.formImport = new FormGroup({
       importFile: new FormControl('', Validators.required)
@@ -88,7 +108,7 @@ export class RepairRequestComponent implements OnInit {
           this.request_by = requstBy;
           var  requestDate = this.datePipe.transform(this.today, 'yyyy-MM-dd');
           this.request_date = requestDate;
-          console.log("RequstFrom: "+requestDate);
+          console.log("RequstFrom: "+this.request_by);
 
           console.log(this._emailService.test);
           console.log("Section  : "+JSON.parse(localStorage.getItem('sectionID')));
@@ -136,7 +156,7 @@ export class RepairRequestComponent implements OnInit {
     
     this.router.navigate(['./login']);
   })
-  }
+  } // End ngOnInit
   public startCounter() {
     if (this._timerSubscription) {
         this._timerSubscription.unsubscribe();
@@ -148,18 +168,40 @@ export class RepairRequestComponent implements OnInit {
         this._counter++;
         this.changeRef.markForCheck();
     });
-  }
+  } // End startCounter
+  validateFile(name: String) {
+    var ext = name.substring(name.lastIndexOf('.') + 1);
+    if (ext.toLowerCase() == 'jpg' || ext.toLowerCase() == 'png') {
+        return true;
+    }
+    else {
+        return false;
+    }
+}//End Validate File
   onFileChange(files: FileList) {
+    this.leangthFileForInsert = files.length;
     this.startCounter();
     this.idleTimeoutSvc.resetTimer();
     this.empList = [];
     this.empList.length = 0;
     this.filename = "";
-   
     this.imagePath = files;
-   
     this.urls = [];
-    
+    this._album = [];
+
+    for(var  i = 0 ; i < files.length; i++){
+      
+      let tablefilename = new tableFilename();
+      tablefilename.name = files.item(i).name;
+      if(!this.validateFile(tablefilename.name)){
+        return;
+      }else{
+        this.empList.push(tablefilename);
+      }
+       
+     
+    }
+
     console.log("Log : "+files.length);
     for(let file of this.imagePath){
       var reader = new FileReader();
@@ -167,20 +209,22 @@ export class RepairRequestComponent implements OnInit {
       reader.onload = (files: any) => {
         // this.imgURL = reader.result; 
         this.imgURL = files.target.result;
+        const src = this.imgURL;
+      const caption = '';
+      const thumb = this.imgURL;
+      const album = {
+         src: src,
+         caption: caption,
+         thumb: thumb
+      };
+        this._album.push(album);
         this.urls.push(this.imgURL);
         console.log(this.urls);
       }
             reader.readAsDataURL(file);
 
     }
-    for(var  i = 0 ; i < files.length; i++){
     
-      let tablefilename = new tableFilename();
-      tablefilename.name = files.item(i).name;
-      
-       
-      this.empList.push(tablefilename);
-    }
     for (let index = 0; index < this.empList.length; index++) {
       if(index == this.empList.length-1){
         this.filename = this.filename+this.empList[index].name;
@@ -189,12 +233,23 @@ export class RepairRequestComponent implements OnInit {
       }
     }
     console.log("Name : "+this.filename )
-    // this.labelImport.nativeElement.innerText = Array.from(files)
-    //   .map(f => f.name)
-    //   .join(', '); 
-    // this.fileToUpload = files.item(0);
+ 
+  }// End FileChang
+
+  open(index: number): void {
+    // open lightbox
+    this._lightbox.open(this._album, index);
   }
+ 
+  close(): void {
+    // close lightbox programmatically
+    this._lightbox.close();
+  }
+  
   removeLanguague(empLists, index){
+    this.urls.splice(index,1);
+    this._album.splice(index,1);
+    console.log("IndexImage = "+index);
     this.startCounter();
     this.idleTimeoutSvc.resetTimer();
     this.filename = "";
@@ -210,8 +265,18 @@ export class RepairRequestComponent implements OnInit {
     }
     console.log("Name : "+this.filename )
   
-}
+ }// End Remove
 createRequest(requestTypess,locationList,beforeDetail){
+  
+  if(beforeDetail == ""){
+    this.showToast(this.status, this.title, this.content);
+    return;
+  }
+  this.disableCreate = true;
+  // Set DialogSucces
+  this.title = "CreateRequest SUCCESS";
+  this.status = NbToastStatus.SUCCESS;
+  ///////////////////
   for(let index = 0 ;index<this.service.listrequestTypeList.length;index++){
     if(this.service.listrequestTypeList[index].requestType_ID == requestTypess){
       this.requTypeName = this.service.listrequestTypeList[index].requestType_Name;
@@ -244,19 +309,22 @@ createRequest(requestTypess,locationList,beforeDetail){
     
     console.log( this.requestno);
     //Insert RequestPicture
-  let splitFilename = this.filename.split(",");
-  if(splitFilename.length >0){
-    console.log("ImageLangth : "+this.imagePath.length);
-    for(let index = 0;index<this.imagePath.length;index++){
-      var beforPicture = "Before"+this.requestno+"_"+index;
-       this.service.postDataRequestPicture(beforPicture,this.requestno,splitFilename[index],1,1)
+    if(this.leangthFileForInsert>0){ // Check File Leangth
+      let splitFilename = this.filename.split(",");
+      if(splitFilename.length >0){
+        console.log("ImageLangth : "+this.imagePath.length);
+        for(let index = 1;index<=splitFilename.length;index++){
+          var beforPicture = "Before"+this.requestno+"_"+index;
+           this.service.postDataRequestPicture(beforPicture,this.requestno,splitFilename[index-1],1,1)
+        }
+      }else{
+        // for(let index = 0;index<this.imagePath.length;index++){
+          var beforPicture = "Before"+this.requestno+"_1";
+           this.service.postDataRequestPicture(beforPicture,this.requestno,this.filename,1,1)
+        // }
+      }
     }
-  }else{
-    for(let index = 0;index<this.imagePath.length;index++){
-      var beforPicture = "Before"+this.requestno+"_"+index;
-       this.service.postDataRequestPicture(beforPicture,this.requestno,this.filename,1,1)
-    }
-  }
+  
   console.log(this.requestno+"  "+this.request_by+"  "+this.service.listmicApplication[0].misc_code);
   var statusInsert = +this.service.listmicApplication[0].misc_code + 1;
   //Insert RequsetHeadder
@@ -317,9 +385,26 @@ createRequest(requestTypess,locationList,beforeDetail){
         console.log(err);
       }
     );  
-
+    this.showToast(this.status, this.title, this.content);
     
   })
 
-}
+ }//End Create
+ private showToast(type: NbToastStatus, title: string, body: string) {
+  const config = {
+    status: type,
+    destroyByClick: this.destroyByClick,
+    duration: this.duration,
+    hasIcon: this.hasIcon,
+    position: this.position,
+    preventDuplicates: this.preventDuplicates,
+  };
+  const titleContent = title ? ` ${title}` : '';
+
+ 
+  this.toastrService.show(
+    body,
+    `${titleContent}`,
+    config);
+ }//End showToast
 }
