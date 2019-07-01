@@ -121,8 +121,10 @@
                    </div> -->
                   
                    <div class="col-sm-12">
+                      <form action="/api/upload" method="post" enctype="multipart/form-data">
                       <input [disabled]="disableCreate" type="file" multiple class="form-control-file"  id="importFile" (change)="onFileChange($event.target.files)">
-                          <nb-card class="list-card" size="small">
+                      </form>    
+                        <nb-card class="list-card" size="small">
                               <nb-card-body>
                                   <form>
                                       <div class="form-group">
@@ -144,7 +146,9 @@
                                                     (click)="removeLanguague(empLists, i)">
                                                   <span class="glyphicon glyphicon-trash"></span> Remove
                                                    </button></td>
-                                                   <td><img src='{{urls[i]}}'  (click)="open(i)" class="rounded mb-3 pointer" width="180" height="180">
+                                                   <td>
+                                                     <!-- <img src='{{urls[i]}}'  (click)="open(i)" class="rounded mb-3 pointer" width="180" height="180"> -->
+                                                    <img src='http://localhost:5000/api/upload'  (click)="open(i)" class="rounded mb-3 pointer" width="180" height="180">
                                                   </td>
                                                 </tr>
                                               </tbody>

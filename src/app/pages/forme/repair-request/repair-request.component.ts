@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NbToastrService, NbGlobalPosition, NbGlobalPhysicalPosition } from '@nebular/theme';
 import { NbToastStatus } from '@nebular/theme/components/toastr/model';
 import { LightboxModule, Lightbox } from 'ngx-lightbox';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'ngx-repair-request',
@@ -56,6 +57,7 @@ export class RepairRequestComponent implements OnInit {
   requestTypeShowHTMLValueID: string = "";
   locationShowHTMLValueID: string = "";
   locationShowHTMLValue: string = "";
+  myData: any[] = [];
   //DeclareShowError
   destroyByClick = true;
   duration = 2000;
@@ -70,7 +72,8 @@ export class RepairRequestComponent implements OnInit {
   //////////////////
   private sub: any;
   private _album: Array<any> = [];
-  constructor(private _lightbox: Lightbox,
+  constructor(private http : HttpClient,
+    private _lightbox: Lightbox,
     private toastrService: NbToastrService,
     private route: ActivatedRoute,private router: Router,
     public service: IndexService,private datePipe: DatePipe,
@@ -272,6 +275,24 @@ createRequest(requestTypess,locationList,beforeDetail){
     this.showToast(this.status, this.title, this.content);
     return;
   }
+  //Uploade File
+  let formData = new FormData();
+  for(var i = 0; i < this.imagePath.length; i++) {
+      
+    formData.append("uploads[]", this.imagePath[i], this.imagePath[i].name);
+  }
+  console.log(formData);
+    this.http.post('/api/upload', formData)
+    .subscribe((response)=>{
+     for(let index = 0 ;index<response['message1'].uploads.length;index++){
+        console.log('response receved is ', response['message1'].uploads[index].path);
+     }
+     
+      // console.log('response receved is ', response['message1'].uploads.length);
+ 
+     
+    })
+  //////////////
   this.disableCreate = true;
   // Set DialogSucces
   this.title = "CreateRequest SUCCESS";
