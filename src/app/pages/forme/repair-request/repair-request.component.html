@@ -140,17 +140,33 @@
                                                 </tr>
                                               </thead>
                                               <tbody>
-                                                <tr *ngFor="let empLists of empList ; let i = index;">
-                                                  <td>{{empLists.name}}</td>
-                                                  <td><button type="button" class="btn btn-danger btn-xs"
-                                                    (click)="removeLanguague(empLists, i)">
-                                                  <span class="glyphicon glyphicon-trash"></span> Remove
-                                                   </button></td>
-                                                   <td>
-                                                     <!-- <img src='{{urls[i]}}'  (click)="open(i)" class="rounded mb-3 pointer" width="180" height="180"> -->
-                                                    <img src='http://localhost:5000/api/upload'  (click)="open(i)" class="rounded mb-3 pointer" width="180" height="180">
-                                                  </td>
-                                                </tr>
+                                                  <ng-container *ngFor="let empLists of empList ; let i = index;">
+                                                      <tr *ngIf="showTable == 1">
+                                                          <td>{{empLists.name}}</td>
+                                                          <td><button type="button" class="btn btn-danger btn-xs"
+                                                            (click)="removeLanguague(empLists, i)">
+                                                          <span class="glyphicon glyphicon-trash"></span> Remove
+                                                           </button></td>
+                                                           <td>
+                                                             <img src='{{urls[i]}}'  (click)="open(i)" class="rounded mb-3 pointer" width="180" height="180">
+                                                            <!-- <img src='http://localhost:5000/api/upload'  (click)="open(i)" class="rounded mb-3 pointer" width="180" height="180"> -->
+                                                          </td>
+                                                        </tr>
+                                                  </ng-container>
+                                                  <ng-container *ngFor="let recipient of map1 | keyvalue ; let i = index;">
+                                                      <tr *ngIf="showTable == 2">
+                                                          <td>{{recipient.value}}</td>
+                                                          <td><button type="button" class="btn btn-danger btn-xs"
+                                                            (click)="removeLanguague(recipient.key, i)">
+                                                          <span class="glyphicon glyphicon-trash"></span> Remove
+                                                           </button></td>
+                                                           <td>
+                                                             
+                                                            <img src='http://localhost:5000/api/upload/{{recipient.key}}'  (click)="open(i)" class="rounded mb-3 pointer" width="180" height="180">
+                                                          </td>
+                                                        </tr>
+                                                  </ng-container>
+                                                
                                               </tbody>
                                             </table>
                                           </div>

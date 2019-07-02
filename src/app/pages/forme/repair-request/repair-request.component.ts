@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { tableFilename, requestHeader, user } from '../../../shared/index.model';
+import { tableFilename, requestHeader, user, requestPicture } from '../../../shared/index.model';
 import { IndexService } from '../../../shared/index.service';
 import { DatePipe } from '@angular/common';
 import { EmailService } from '../../../shared/email.service';
@@ -18,6 +18,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./repair-request.component.scss']
 })
 export class RepairRequestComponent implements OnInit {
+  map1 = new Map<String, String>();
   public _counter: number = 0;
   public _status: string = "Initialized.";
   private _timer: Observable<number>;
@@ -32,10 +33,13 @@ export class RepairRequestComponent implements OnInit {
   fileToUpload: File = null;
   filename: string = "";
   empList: Array<tableFilename> = [];
+  namePathArray: Array<any> = [];
+  nameFileArray: Array<any> = [];
   private tbUser:user[];
   today: number = Date.now();
   requestno: String = "";
   private tbrequestHeader:requestHeader[];
+  private tbrequestPicture: requestPicture[];
   public imagePath;
   imgURL: any;
   public message: string;
@@ -47,6 +51,7 @@ export class RepairRequestComponent implements OnInit {
   urls : Array<any> = [];
   id : number = 0;
   showRequestPerson: boolean = false;
+  showTable: number = 0;
   requTypeName: string = "";  
   valueTextArea: string = "";
   statusShowHTML: string = "";
@@ -95,6 +100,7 @@ export class RepairRequestComponent implements OnInit {
       this.id = +params['id']; // (+) converts string 'id' to a number
       if(params['id'] == "0"){
         this.requestTypeShowHTML = 0;
+        this.showTable = 1 ;
       //  this.statusShowHTML = this.service.listmicApplication[0].value1;
       this.statusShowHTML = "Create";
        console.log("ShowSTATUS: "+this.statusShowHTML);
@@ -116,6 +122,7 @@ export class RepairRequestComponent implements OnInit {
           console.log(this._emailService.test);
           console.log("Section  : "+JSON.parse(localStorage.getItem('sectionID')));
       }else{
+        this.showTable = 2;
         this.service.getRequestHeaderwhereID(params['id']).subscribe((Response) => {
           this.requestNoShowHTML = params['id'];
           this.tbrequestHeader = Response; 
@@ -145,8 +152,44 @@ export class RepairRequestComponent implements OnInit {
           }
           this.valueTextArea = this.tbrequestHeader[0].beforeDetail;
         });
-       
+        this.service.getRequestPicturewhereID(params['id']).subscribe((Response) => {
+            this.tbrequestPicture = Response;
+            var checkIndexPicture = 0;
+            this._album = [];
+            this.namePathArray = [];
+            this.nameFileArray = [];
+            for(let ee of Response){
+              
+              var pathNamePic = this.tbrequestPicture[checkIndexPicture].attchfile_path.split("\\");
+              // var namePic = pathNamePic[pathNamePic.length-1].split(".");
+              this.namePathArray.push(pathNamePic[pathNamePic.length-1]);
+              this.nameFileArray.push(this.tbrequestPicture[checkIndexPicture].attachfile_desc);
+              this.map1.set(pathNamePic[pathNamePic.length-1],this.tbrequestPicture[checkIndexPicture].attachfile_desc);
+              console.log(this.tbrequestPicture[checkIndexPicture].attachfile_desc);
+              const src = this.tbrequestPicture[checkIndexPicture].attchfile_path;
+              const caption = '';
+              const thumb = this.imgURL;
+              const album = {
+                src: 'http://localhost:5000/api/upload/'+pathNamePic[pathNamePic.length-1],
+                caption: caption,
+                thumb: thumb
+              };
+                this._album.push(album);
+              console.log("PicturePath2 : "+pathNamePic[pathNamePic.length-1]);
+
+                checkIndexPicture++;
+            }
+            // for(let index =0 ;index<this.tbrequestPicture.length;index++){
+            //   console.log("PicturePath : "+this.tbrequestPicture[index].attchfile_path);
+            //    var pathNamePic = this.tbrequestPicture[index].attchfile_path.split("\\");
+            //     var namePic = pathNamePic[pathNamePic.length].split(".");
+            //     this.namePathArray.push(namePic[0]);
+            //     console.log(namePic[0]);
+
+            // }
+        });
       }
+      
       console.log(this.id+" == ID")
      });
    
@@ -282,16 +325,7 @@ createRequest(requestTypess,locationList,beforeDetail){
     formData.append("uploads[]", this.imagePath[i], this.imagePath[i].name);
   }
   console.log(formData);
-    this.http.post('/api/upload', formData)
-    .subscribe((response)=>{
-     for(let index = 0 ;index<response['message1'].uploads.length;index++){
-        console.log('response receved is ', response['message1'].uploads[index].path);
-     }
-     
-      // console.log('response receved is ', response['message1'].uploads.length);
- 
-     
-    })
+    
   //////////////
   this.disableCreate = true;
   // Set DialogSucces
@@ -334,14 +368,33 @@ createRequest(requestTypess,locationList,beforeDetail){
       let splitFilename = this.filename.split(",");
       if(splitFilename.length >0){
         console.log("ImageLangth : "+this.imagePath.length);
-        for(let index = 1;index<=splitFilename.length;index++){
-          var beforPicture = "Before"+this.requestno+"_"+index;
-           this.service.postDataRequestPicture(beforPicture,this.requestno,splitFilename[index-1],1,1)
-        }
+        // for(let index = 1;index<=splitFilename.length;index++){
+         
+          this.http.post('/api/upload', formData)
+            .subscribe((response)=>{
+              // console.log("PathID : "+response['message1']);
+            for(let index = 0 ;index<response['message1'].uploads.length;index++){
+              var beforPicture = "Before"+this.requestno+"_"+index;
+                // console.log('response receved is ', response['message1'].uploads[index].path);
+                this.service.postDataRequestPicture(beforPicture,this.requestno,splitFilename[index-1],1,1
+                  ,response['message1'].uploads[index].path)
+            }
+            
+              // console.log('response receved is ', response['message1'].uploads.length);
+        
+            
+            })
+           
+        // }
       }else{
         // for(let index = 0;index<this.imagePath.length;index++){
-          var beforPicture = "Before"+this.requestno+"_1";
-           this.service.postDataRequestPicture(beforPicture,this.requestno,this.filename,1,1)
+          this.http.post('/api/upload', formData)
+          .subscribe((response)=>{
+            var beforPicture = "Before"+this.requestno+"_1";
+            this.service.postDataRequestPicture(beforPicture,this.requestno,this.filename,1,1
+              ,response['message1'].uploads[0].path)
+          });
+        
         // }
       }
     }

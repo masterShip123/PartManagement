@@ -174,5 +174,8 @@ export class requestHeader{
  updateBy : string;
   
 }
-
+export class requestPicture{
+  attachfile_desc: string;
+  attchfile_path: string;
+}
 

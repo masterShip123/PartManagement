@@ -40,6 +40,9 @@ export class IndexService {
   getRequestHeaderwhereID(reID) {
     return this.http.get("http://localhost:62943/showTableWebService.asmx/GetRequestHeaderwhereID?request_ID="+reID).map((res) => res.json());
   }
+  getRequestPicturewhereID(reID) {
+    return this.http.get("http://localhost:62943/showTableWebService.asmx/GetRequestPicture?request_ID="+reID).map((res) => res.json());
+  }
   getRequestHeaderwhereDepartment(section_ID) {
     return this.http.get("http://localhost:62943/showTableWebService.asmx/GetWhereRequestHeaderForDepartMent?section_ID="+section_ID).map((res) => res.json());
   }
@@ -647,14 +650,14 @@ export class IndexService {
       });
     });
   }
-  postDataRequestPicture(attachfile_ID,request_ID,attachfile_desc,timing,activeFlag): Promise<any> {
+  postDataRequestPicture(attachfile_ID,request_ID,attachfile_desc,timing,activeFlag,attchfile_path): Promise<any> {
     
 
     return new Promise((resolve, reject) => {
       setTimeout(() => {
           return this.http.get('http://localhost:62943/showTableWebService.asmx/InsertRequestPicture?attachfile_ID='+attachfile_ID
           +'&request_ID='+request_ID+'&attachfile_desc='+attachfile_desc
-          +'&timing='+timing+'&activeFlag='+activeFlag,{
+          +'&timing='+timing+'&activeFlag='+activeFlag+'&attchfile_path='+attchfile_path,{
                 }).subscribe((res: Response) => {
                   
                 }, (error: any) => {
