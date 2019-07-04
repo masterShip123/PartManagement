@@ -156,7 +156,7 @@
                                                   <ng-container *ngFor="let recipient of map1 | keyvalue ; let i = index;">
                                                       <tr *ngIf="showTable == 2">
                                                           <td>{{recipient.value}}</td>
-                                                          <td><button type="button" class="btn btn-danger btn-xs"
+                                                          <td><button [disabled]="true" type="button" class="btn btn-danger btn-xs"
                                                             (click)="removeLanguague(recipient.key, i)">
                                                           <span class="glyphicon glyphicon-trash"></span> Remove
                                                            </button></td>
@@ -188,7 +188,7 @@
                                   <div class="form-group">
                                       <label *ngIf="showRequestPerson">{{request_by}}</label>   
                                   </div>
-                                  <button [disabled]="!(perMission == 'UT4')" nbButton status="success" (click)="createRequest(requestTypess.value,locationList.value,beforeDetail.value)">Create</button>
+                                  <button [disabled]="perMission == 'UT1' || perMission == 'UT2' || perMission == 'UT5' || perMission == 'UT3' || perMission == 'UT6'" nbButton status="success" (click)="createRequest(requestTypess.value,locationList.value,beforeDetail.value)">Create</button>
                                   <!-- <button [disabled]="!(perMission == 'UT4')" nbButton status="danger"  (click)="cancel()">Cancel</button> -->
                                  
                                 </form>
@@ -204,8 +204,8 @@
                                   <div class="form-group">
                                       <!-- <label >Choose file</label>    -->
                                   </div>
-                                  <button [disabled]="!(perMission == 'UT5')" type="submit" class="btn btn-success">Create</button>
-                                  <button [disabled]="!(perMission == 'UT5')" nbButton status="danger"  (click)="cancel()">Cancel</button>
+                                  <button [disabled]="perMission == 'UT1' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" type="submit" (click)="updateRequest(5)" class="btn btn-success">Approve</button>
+                                  <button [disabled]="perMission == 'UT1' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" nbButton status="danger"  (click)="cancelRequest()">Cancel</button>
                                 </form>
                               </nb-card-body>
                             </nb-card>
@@ -218,8 +218,8 @@
                                   <div class="form-group">
                                       <!-- <label >Choose file</label>    -->
                                   </div>
-                                  <button [disabled]="!(perMission == 'UT1')" type="submit" class="btn btn-success">Create</button>
-                                  <button [disabled]="!(perMission == 'UT1')" nbButton status="danger"  (click)="cancel()">Cancel</button>
+                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="updateRequest(1)" type="submit" class="btn btn-success">Approve</button>
+                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" nbButton status="danger"  (click)="cancelRequest()">Cancel</button>
                                 </form>
                               </nb-card-body>
                             </nb-card>

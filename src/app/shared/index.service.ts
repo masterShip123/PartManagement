@@ -687,6 +687,21 @@ export class IndexService {
       });
     });
   }
+  putDataRequestHeader(request_no,status,request_by): Promise<any> {
+    
+   
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+          return this.http.get('http://localhost:62943/showTableWebService.asmx/updateRequestHeader?request_no='+request_no
+          +'&status='+status+'&request_by='+request_by,{
+                }).subscribe((res: Response) => {
+                  
+                }, (error: any) => {
+              })
+       
+      });
+    });
+  }
   postDataProductionLine(productionLinename,productionLineid,factoryname,StatusValue): Promise<any> {
     
 

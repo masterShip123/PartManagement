@@ -80,6 +80,9 @@ private islog:boolean = false;
        if(this.tbUser[0].userType_ID == "UT4"){
         localStorage.setItem('UseremailUT4', JSON.stringify(this.tbUser[0].email));
         localStorage.setItem('passwordUserUT4', JSON.stringify(password));
+       }else{
+        localStorage.setItem('UseremailUT4', JSON.stringify("acs57011210007@gmail.com"));
+        localStorage.setItem('passwordUserUT4', JSON.stringify("nuttawut"));
        }
        localStorage.setItem('Usertype', JSON.stringify(this.tbUser[0].userType_ID));
       

@@ -55,6 +55,7 @@ export class RepairRequestComponent implements OnInit {
   requTypeName: string = "";  
   valueTextArea: string = "";
   statusShowHTML: string = "";
+  statusKeyShowHTML: number = 0;
   requestNoShowHTML: string = "";
   requesttimeShowHTML: string = "";
   requestTypeShowHTML: number = 0;
@@ -122,6 +123,10 @@ export class RepairRequestComponent implements OnInit {
           console.log(this._emailService.test);
           console.log("Section  : "+JSON.parse(localStorage.getItem('sectionID')));
       }else{
+        this.perMission = JSON.parse(localStorage.getItem('Usertype'));
+        var  requstBy = JSON.parse(localStorage.getItem('Username'))+" "+JSON.parse(localStorage.getItem('surname'))
+        this.request_by = requstBy;
+        this.disableCreate = true;
         this.showTable = 2;
         this.service.getRequestHeaderwhereID(params['id']).subscribe((Response) => {
           this.requestNoShowHTML = params['id'];
@@ -135,6 +140,7 @@ export class RepairRequestComponent implements OnInit {
             // console.log(this.tbrequestHeader[0].status+" : == : "+this.service.listmicApplication[index].misc_code)
             if(this.service.listmicApplication[index].misc_code == this.tbrequestHeader[0].status){
               this.statusShowHTML = this.service.listmicApplication[index].value1;
+              this.statusKeyShowHTML = this.service.listmicApplication[index].misc_code;
             }
           }
           this.requestTypeShowHTML = 1;
@@ -365,6 +371,7 @@ createRequest(requestTypess,locationList,beforeDetail){
     console.log( this.requestno);
     //Insert RequestPicture
     if(this.leangthFileForInsert>0){ // Check File Leangth
+      console.log("CheckFilename: "+this.filename)
       let splitFilename = this.filename.split(",");
       if(splitFilename.length >0){
         console.log("ImageLangth : "+this.imagePath.length);
@@ -376,44 +383,61 @@ createRequest(requestTypess,locationList,beforeDetail){
             for(let index = 0 ;index<response['message1'].uploads.length;index++){
               var beforPicture = "Before"+this.requestno+"_"+index;
                 // console.log('response receved is ', response['message1'].uploads[index].path);
-                this.service.postDataRequestPicture(beforPicture,this.requestno,splitFilename[index-1],1,1
+                this.service.postDataRequestPicture(beforPicture,this.requestno,splitFilename[index],1,1
                   ,response['message1'].uploads[index].path)
             }
             
               // console.log('response receved is ', response['message1'].uploads.length);
-        
+              console.log(this.requestno+"  "+this.request_by+"  "+this.service.listmicApplication[0].misc_code);
+              var statusInsert = +this.service.listmicApplication[0].misc_code + 1;
+              //Insert RequsetHeadder
+              this.service.postDataRequestHeader(this.requestno,
+                this.request_date,
+                requestTime,
+                this.request_by
+                ,JSON.parse(localStorage.getItem('sectionID')),
+                statusInsert,
+                requestTypess,
+                locationList,
+                beforeDetail,
+                this.request_by,
+                this.request_by
+                ,this.request_by);
             
             })
            
         // }
       }else{
         // for(let index = 0;index<this.imagePath.length;index++){
+          console.log("Checkk: "+this.filename);
           this.http.post('/api/upload', formData)
           .subscribe((response)=>{
             var beforPicture = "Before"+this.requestno+"_1";
             this.service.postDataRequestPicture(beforPicture,this.requestno,this.filename,1,1
               ,response['message1'].uploads[0].path)
+
+              console.log(this.requestno+"  "+this.request_by+"  "+this.service.listmicApplication[0].misc_code);
+              var statusInsert = +this.service.listmicApplication[0].misc_code + 1;
+              //Insert RequsetHeadder
+              this.service.postDataRequestHeader(this.requestno,
+                this.request_date,
+                requestTime,
+                this.request_by
+                ,JSON.parse(localStorage.getItem('sectionID')),
+                statusInsert,
+                requestTypess,
+                locationList,
+                beforeDetail,
+                this.request_by,
+                this.request_by
+                ,this.request_by); 
           });
         
         // }
       }
     }
   
-  console.log(this.requestno+"  "+this.request_by+"  "+this.service.listmicApplication[0].misc_code);
-  var statusInsert = +this.service.listmicApplication[0].misc_code + 1;
-  //Insert RequsetHeadder
-  this.service.postDataRequestHeader(this.requestno,
-    this.request_date,
-    requestTime,
-    this.request_by
-    ,JSON.parse(localStorage.getItem('sectionID')),
-    statusInsert,
-    requestTypess,
-    locationList,
-    beforeDetail,
-    this.request_by,
-    this.request_by
-    ,this.request_by);
+  
    
   })
   
@@ -436,8 +460,9 @@ createRequest(requestTypess,locationList,beforeDetail){
     }
 
       console.log("sectionEmail : "+sectionEmail);
+      console.log("CheckREqqq : "+this.requestno);
   var user = {
-    requestno: this.requestno,
+    requestnos: ""+this.requestno,
     formEmail : JSON.parse(localStorage.getItem('UseremailUT4')),
     userPassword: JSON.parse(localStorage.getItem('passwordUserUT4')),
     lengthEmail: sectionEmail.length,
@@ -464,6 +489,110 @@ createRequest(requestTypess,locationList,beforeDetail){
   })
 
  }//End Create
+ updateRequest(permissionID){
+  var statusInsert = +this.statusKeyShowHTML + 1;
+  //Update Status
+  this.service.putDataRequestHeader(this.requestNoShowHTML,statusInsert,this.request_by);
+  var splitUserTypeDatabase;
+  var sectionEmail = new Array();
+    // Set DialogSucces
+  this.title = "Approve SUCCESS";
+  this.status = NbToastStatus.SUCCESS;
+  ///////////////////
+  this.service.getRequestHeaderwhereDepartment(JSON.parse(localStorage.getItem('sectionID'))).subscribe((Response) => {
+    this.tbUser = Response;
+    if(permissionID == 5){
+      for(let i=0;i<this.tbUser.length;i++){
+        splitUserTypeDatabase = this.tbUser[i].userType_ID.split("UT");
+        console.log(" splitUserTypeDatabase : "+splitUserTypeDatabase[1]);
+        if(1 == +splitUserTypeDatabase[1]){
+          sectionEmail.push(this.tbUser[i].email);
+          console.log("user.email : "+this.tbUser[i].email);
+       }
+       console.log("user.userType_ID : "+this.tbUser[i].userType_ID);
+      }
+      console.log("sectionEmail : "+sectionEmail);
+    }
+    else if(permissionID == 1){
+      for(let i=0;i<this.tbUser.length;i++){
+        splitUserTypeDatabase = this.tbUser[i].userType_ID.split("UT");
+        console.log(" splitUserTypeDatabase : "+splitUserTypeDatabase[1]);
+        if(2 == +splitUserTypeDatabase[1]){
+          sectionEmail.push(this.tbUser[i].email);
+          console.log("user.email : "+this.tbUser[i].email);
+       }
+       console.log("user.userType_ID : "+this.tbUser[i].userType_ID);
+      }
+      console.log("sectionEmail : "+sectionEmail);
+    }
+  var user = {
+    requestnos: ""+this.requestNoShowHTML,
+    formEmail : JSON.parse(localStorage.getItem('UseremailUT4')),
+    userPassword: JSON.parse(localStorage.getItem('passwordUserUT4')),
+    lengthEmail: sectionEmail.length,
+    sendToemail: sectionEmail,
+    approveOrCancel: "Approve",
+    requestyp: this.requestTypeShowHTMLValue,
+    link: "http://localhost:4200/#/pages/forme/repair/"+this.requestNoShowHTML
+  }
+  console.log("User : "+user.sendToemail);
+  console.log("UserlengthEmail : "+user.lengthEmail);
+  this._emailService.sendEmail("http://localhost:3000/sendmail", user).subscribe(
+      data => {
+        let res:any = data; 
+        console.log(
+          `👏 > 👏 > 👏 > 👏 ${user.formEmail} is successfully register and mail has been sent and the message id is ${res.messageId}`
+        );
+      },
+      err => {
+        console.log(err);
+      }
+    );  
+    this.showToast(this.status, this.title, this.content);
+    
+  })
+ }// End updateRequest
+
+ cancelRequest(){
+  var statusInsert = 99;
+  //Update Status
+  this.service.putDataRequestHeader(this.requestNoShowHTML,statusInsert,this.request_by);
+  var splitUserTypeDatabase;
+  var sectionEmail = new Array();
+    // Set DialogSucces
+  this.title = "Cancel SUCCESS";
+  this.status = NbToastStatus.DANGER;
+  ///////////////////
+  this.service.getRequestHeaderwhereDepartment(JSON.parse(localStorage.getItem('sectionID'))).subscribe((Response) => {
+    this.tbUser = Response;
+          sectionEmail.push(JSON.parse(localStorage.getItem('UseremailUT4')));
+  var user = {
+    requestnos: ""+this.requestNoShowHTML,
+    formEmail : JSON.parse(localStorage.getItem('UseremailUT4')),
+    userPassword: JSON.parse(localStorage.getItem('passwordUserUT4')),
+    lengthEmail: sectionEmail.length,
+    sendToemail: sectionEmail,
+    approveOrCancel: "Cancel",
+    requestyp: this.requestTypeShowHTMLValue,
+    link: "http://localhost:4200/#/pages/forme/repair/"+this.requestNoShowHTML
+  }
+  console.log("User : "+user.sendToemail);
+  console.log("UserlengthEmail : "+user.lengthEmail);
+  this._emailService.sendEmail("http://localhost:3000/sendmail", user).subscribe(
+      data => {
+        let res:any = data; 
+        console.log(
+          `👏 > 👏 > 👏 > 👏 ${user.formEmail} is successfully register and mail has been sent and the message id is ${res.messageId}`
+        );
+      },
+      err => {
+        console.log(err);
+      }
+    );  
+    this.showToast(this.status, this.title, this.content);
+    
+  })
+ }// End Cancel
  private showToast(type: NbToastStatus, title: string, body: string) {
   const config = {
     status: type,
