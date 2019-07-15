@@ -78,6 +78,9 @@ export class RepairRequestComponent implements OnInit {
   //////////////////
   private sub: any;
   private _album: Array<any> = [];
+  masterSelected:boolean;
+  checklist:any;
+  checkedList:any;
   constructor(private http : HttpClient,
     private _lightbox: Lightbox,
     private toastrService: NbToastrService,
@@ -89,13 +92,20 @@ export class RepairRequestComponent implements OnInit {
     this.formImport = new FormGroup({
       importFile: new FormControl('', Validators.required)
     });
-    
+    this.masterSelected = false;
+      this.checklist = [
+        {id:1,value:'Elenor Anderson',isSelected:false},
+        {id:2,value:'Caden Kunze',isSelected:true}];
+
   }
 
   ngOnInit() {
     this.service.getDataMicApplication();
     this.service.getDataRequestType();
     this.service.getDataLocation();
+    this.service.getDataMicMaintenanceType();
+    this.service.getDataCheckTool();
+    this.service.getDataCheckToolOne();
     //รับพารามิเตอร์จาก URL
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id']; // (+) converts string 'id' to a number
@@ -209,6 +219,27 @@ export class RepairRequestComponent implements OnInit {
     this.router.navigate(['./login']);
   })
   } // End ngOnInit
+ checkUncheckAll() {
+    for (var i = 0; i < this.checklist.length; i++) {
+      this.checklist[i].isSelected = this.masterSelected;
+    }
+    this.getCheckedItemList();
+  }
+
+  isAllSelected() {
+    this.masterSelected = this.checklist.every(function(item:any) {
+        return item.isSelected == true;
+      })
+    this.getCheckedItemList();
+  }
+  getCheckedItemList(){
+    this.checkedList = [];
+    for (var i = 0; i < this.checklist.length; i++) {
+      if(this.checklist[i].isSelected)
+      this.checkedList.push(this.checklist[i]);
+    }
+    this.checkedList = JSON.stringify(this.checkedList);
+  }
   public startCounter() {
     if (this._timerSubscription) {
         this._timerSubscription.unsubscribe();

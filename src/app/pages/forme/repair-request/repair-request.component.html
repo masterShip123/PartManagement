@@ -225,8 +225,346 @@
                             </nb-card>
                        </div>
               </nb-tab>
+              <!-- Tap Repair -->
               <nb-tab tabTitle="Repair Detail">
-                <span>Content #2</span>
+                  <div class="col-sm-12">
+                      <div class="form-group">
+                        <label for="inputWebsite">ตรวจสอบเครื่องมือและเครื่องจักรก่อนการซ่อม* (Check Tooling and Machine before Repaired)</label>  
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                          <div >
+                              <ng-container *ngFor= "let CheckToolsOne of service.listCheckToolOne">
+                                  <input class="custom-checkbox checked" type="checkbox" id="inlineCheckbox1" value="{{CheckToolsOne.checkTool_ID}}">
+                                  <label class="form-check-label" for="inlineCheckbox1">{{CheckToolsOne.checkTool_Name}} </label>
+                                  <br>
+                              </ng-container>
+                            </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="col-md-6" >
+                            <div class="form-group">
+                                <label for="inputWebsite">After Description Correction (รายละเอียดการแก้ไข)</label>
+                              </div>
+                        </div>
+                        <div class="col-md-6" >
+                            <div class="form-group">
+                                <label for="inputWebsite">Attach files (เอกสารแนบ)</label>  
+                              </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="col-md-6" >
+                            <div class="form-group">
+                                <textarea  rows="5" nbInput fullWidth shape="round"  #afterDetail></textarea>
+                              </div>
+                        </div>
+                        <div class="col-md-6" >
+                            <div class="form-group">
+                                <div class="form-check form-check-inline">
+                                    <input class="custom-checkbox checked" type="checkbox" id="inlineCheckbox1" value="option1">
+                                    <label class="form-check-label" for="inlineCheckbox1">มี(Yes) </label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                                    <label class="form-check-label" for="inlineCheckbox2">ไม่มี(No)</label>
+                                  </div>
+                              </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <form action="/api/upload" method="post" enctype="multipart/form-data">
+                        <input [disabled]="disableCreate" type="file" multiple class="form-control-file"  id="importFile" (change)="onFileChange($event.target.files)">
+                        </form>    
+                          <nb-card class="list-card" size="small">
+                                <nb-card-body>
+                                    <form>
+                                        <div class="form-group">
+                                            
+                                           
+                                            <div class="table-responsive">
+                                              <table class="table  table-striped">
+                                                <thead>
+                                                  <tr>
+                                                    <th>Name</th>
+                                                    <th>Actions</th>
+                                                    <th>Image</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <ng-container *ngFor="let empLists of empList ; let i = index;">
+                                                        <tr *ngIf="showTable == 1">
+                                                            <td>{{empLists.name}}</td>
+                                                            <td><button type="button" class="btn btn-danger btn-xs"
+                                                              (click)="removeLanguague(empLists, i)">
+                                                            <span class="glyphicon glyphicon-trash"></span> Remove
+                                                             </button></td>
+                                                             <td>
+                                                               <img src='{{urls[i]}}'  (click)="open(i)" class="rounded mb-3 pointer" width="180" height="180">
+                                                              <!-- <img src='http://localhost:5000/api/upload'  (click)="open(i)" class="rounded mb-3 pointer" width="180" height="180"> -->
+                                                            </td>
+                                                          </tr>
+                                                    </ng-container>
+                                                    <ng-container *ngFor="let recipient of map1 | keyvalue ; let i = index;">
+                                                        <tr *ngIf="showTable == 2">
+                                                            <td>{{recipient.value}}</td>
+                                                            <td><button [disabled]="true" type="button" class="btn btn-danger btn-xs"
+                                                              (click)="removeLanguague(recipient.key, i)">
+                                                            <span class="glyphicon glyphicon-trash"></span> Remove
+                                                             </button></td>
+                                                             <td>
+                                                               
+                                                              <img src='http://localhost:5000/api/upload/{{recipient.key}}'  (click)="open(i)" class="rounded mb-3 pointer" width="180" height="180">
+                                                            </td>
+                                                          </tr>
+                                                    </ng-container>
+                                                  
+                                                </tbody>
+                                              </table>
+                                            </div>
+                                          </div>
+                
+                                        </form>
+                                  </nb-card-body>
+                              </nb-card>
+                            
+                     </div>
+                     <div class="col-sm-12">
+                       <label for="inputWebsite">เวลาที่ใช้ในการซ่อม</label>  
+                     </div>
+                     <div class="col-sm-12">
+                        
+                      <div class="col-md-4" >
+                          <label class="sr-only" for="inlineFormInputGroup">Username</label>
+                          <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                              <div class="input-group-text">Start(เริ่ม)</div>
+                            </div>
+                            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Start(เริ่ม)">
+                          </div>
+                      </div>
+                      <div class="col-md-4" >
+                          <label class="sr-only" for="inlineFormInputGroup">Username</label>
+                          <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                              <div class="input-group-text">Complete(เสร็จสิ้น)</div>
+                            </div>
+                            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Complete(เสร็จสิ้น)">
+                          </div>
+                      </div>
+                      <div class="col-md-4" >
+                          <label class="sr-only" for="inlineFormInputGroup">Username</label>
+                          <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                              <div class="input-group-text">Total(รวม)</div>
+                            </div>
+                            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Total(รวม)">
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <label for="inputWebsite">รายละเอียดการใช้อะไหล่</label>  
+                    </div>
+                    <div class="col-sm-12">
+                    
+                          <nb-card class="list-card" size="small">
+                                <nb-card-body>
+                                    <form>
+                                        <div class="form-group">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                <th>
+                                                  <span class="custom-checkbox">
+                                                    <!-- <input type="checkbox" id="selectAll" (change)="selectAll();" [checked]="selectedAll"> -->
+                                                    <input type="checkbox" [(ngModel)]="masterSelected" name="list_name" value="m1" (change)="checkUncheckAll()"/>
+                                                    <label for="selectAll"></label>
+                                                  </span>
+                                                </th>
+                                                            <th>Part ID</th>
+                                                            <th>Part Name</th>
+                                                <th>Qty</th>
+                                                            <th>Price</th>
+                                                            <th>Other Cost</th>
+                                                            <th>Total Cost</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let item of checklist">
+                                                <td>
+                                                  <span class="custom-checkbox">
+                                                    <!-- <input type="checkbox" [(ngModel)]="a.selected" (change)="checkIfAllSelected();">
+                                                     -->
+                                                     <input type="checkbox" [(ngModel)]="item.isSelected" name="list_name" value="{{item.id}}" (change)="isAllSelected()"/>
+                                                    <label for="checkbox1"></label>
+                                                  </span>
+                                                </td>
+                                                            <td>Part ID</td>
+                                                            <td>Part Name</td>
+                                                            <td>Qty</td>
+                                                            <td>Price</td>
+                                                            <td>Other Cost</td>
+                                                            <td>Total Cost</td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-primary btn-xs">
+                                                                    <span class="glyphicon glyphicon-pencil"></span> Edit </button>
+                                                                <button type="button" class="btn btn-danger btn-xs">
+                                                                <span class="glyphicon glyphicon-trash"></span> Remove </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                          </div>
+                                        </form>
+                                  </nb-card-body>
+                              </nb-card>
+                     </div>
+                     
+                     <div class="col-sm-12">
+                        <div class="col-md-4" >
+                            <label for="inputWebsite">ประเภทการซ่อม</label>
+                        </div>
+                        <div class="col-md-8" >
+                            <label for="inputWebsite">ตรวจสอบเครื่องมือและเครื่องจักรก่อนการซ่อม* (Check Tooling and Machine before Repaired)</label>
+                        </div> 
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="col-md-4" >
+                            <div >
+                                <ng-container *ngFor= "let maintenanceTypes of service.listmicMaintenanceType">
+                                    <input class="custom-checkbox checked" type="checkbox" id="inlineCheckbox1" value="{{maintenanceTypes.misc_code}}">
+                                    <label class="form-check-label" for="inlineCheckbox1">{{maintenanceTypes.value1}} </label>
+                                    <br>
+                                </ng-container>
+                              </div>
+                        </div>
+                        <div class="col-md-8" >
+                            
+                            <div >
+                                <ng-container *ngFor= "let CheckToolsTwo of service.listCheckToolTwo">
+                                    <input class="custom-checkbox checked" type="checkbox" id="inlineCheckbox1" value="{{CheckToolsTwo.checkTool_ID}}">
+                                    <label class="form-check-label" for="inlineCheckbox1">{{CheckToolsTwo.checkTool_Name}} </label>
+                                    <br>
+                                </ng-container>
+                                <br>
+                              </div>
+                        </div>
+                    </div>
+                
+                    <div class="col-sm-12">
+                        <div class="col-md-4" >
+                            <label for="inputWebsite">Comment After Repair/Rebuild</label>
+                        </div>
+                        <div class="col-md-8" >
+                            <label for="inputWebsite"> กรณีที่มีความเกี่ยวข้องด้านคุณภาพให้แผนก QA ร่วมตรวจเช็คด้วย</label>
+                        </div>
+                       
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="col-md-4" >
+                            <div class="form-group">
+                                <textarea  rows="5" nbInput fullWidth shape="round"  #afterComment></textarea>
+                              </div>
+                        </div>
+                        <div class="col-md-8" >
+                            <div class="form-group">
+                                <div class="form-check form-check-inline">
+                                    <input class="custom-checkbox checked" type="checkbox" id="inlineCheckbox1" value="option1">
+                                    <label class="form-check-label" for="inlineCheckbox1">เกี่ยวข้อง</label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                                    <label class="form-check-label" for="inlineCheckbox2">ไม่เกี่ยวข้อง</label>
+                                  </div>
+                                  <br>
+                                  <br>
+                                  <label for="inputWebsite">ความเห็นสำหรับ QA</label>
+                                  <br>
+                                  <div class="form-check form-check-inline">
+                                      <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                                      <label class="form-check-label" for="inlineCheckbox2">OK</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                                        <label class="form-check-label" for="inlineCheckbox2">NG</label>
+                                      </div>
+                                      <div class="form-check form-check-inline">
+                                          <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                                          <label class="form-check-label" for="inlineCheckbox2">Special accept</label>
+                                        </div>
+                              </div>
+                        </div>
+                        <br>
+                        
+                    </div>
+                   <div class="col-sm-12">
+                      <div class="col-md-3">
+                    
+                          <nb-card>
+                              <nb-card-header>Repair Person</nb-card-header>
+                              <nb-card-body>
+                                <form >
+                                  <div class="form-group">
+                                      <label *ngIf="showRequestPerson">{{request_by}}</label>   
+                                  </div>
+                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="updateRequest(1)" type="submit" class="btn btn-success btn-xs">Approve</button>
+                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="cancelRequest()" type="submit" class="btn btn-danger btn-xs">Cancel</button>
+                                  
+                                  <!-- <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" nbButton status="danger" class="btn-xs" (click)="cancelRequest()">Cancel</button> -->
+                                
+                                </form>
+                              </nb-card-body>
+                            </nb-card>
+                       </div>
+                
+                       <div class="col-md-3">
+                          <nb-card>
+                              <nb-card-header>Request Section (LD Up)</nb-card-header>
+                              <nb-card-body>
+                                <form >
+                                  <div class="form-group">
+                                      <!-- <label >Choose file</label>    -->
+                                  </div>
+                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="updateRequest(1)" type="submit" class="btn btn-success btn-xs">Approve</button>
+                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="cancelRequest()" type="submit" class="btn btn-danger btn-xs">Cancel</button>
+                                  </form>
+                              </nb-card-body>
+                            </nb-card>
+                       </div>
+                       <div class="col-md-3" >
+                          <nb-card>
+                              <nb-card-header>QA Approve</nb-card-header>
+                              <nb-card-body>
+                                <form >
+                                  <div class="form-group">
+                                      <!-- <label >Choose file</label>    -->
+                                  </div>
+                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="updateRequest(1)" type="submit" class="btn btn-success btn-xs">Approve</button>
+                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="cancelRequest()" type="submit" class="btn btn-danger btn-xs">Cancel</button>
+                                    </form>
+                              </nb-card-body>
+                            </nb-card>
+                       </div>
+                       <div class="col-md-3" >
+                          <nb-card>
+                              <nb-card-header>Repair section (ACH Up)</nb-card-header>
+                              <nb-card-body>
+                                <form >
+                                  <div class="form-group">
+                                      <!-- <label >Choose file</label>    -->
+                                  </div>
+                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="updateRequest(1)" type="submit" class="btn btn-success btn-xs">Approve</button>
+                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="cancelRequest()" type="submit" class="btn btn-danger btn-xs">Cancel</button>
+                                   </form>
+                              </nb-card-body>
+                            </nb-card>
+                       </div>
+                   </div>
               </nb-tab>
             </nb-tabset>
           </nb-card>

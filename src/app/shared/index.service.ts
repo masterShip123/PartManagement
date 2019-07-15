@@ -3,15 +3,18 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs';
 import { Response } from '@angular/http';
-import { sectionList, miscdataList, userTypeList, user, departmentList, FactoryList, ProductionLineList, ProvinceList, unitTypeList, locationList, makerList, moldTypeList, partMasterList, requestTypeList } from './index.model';
+import { sectionList, miscdataList, userTypeList, user, departmentList, FactoryList, ProductionLineList, ProvinceList, unitTypeList, locationList, makerList, moldTypeList, partMasterList, requestTypeList, tb_CheckTool } from './index.model';
 import { HttpClient } from "@angular/common/http";
 
 
 @Injectable()
 export class IndexService {
 
+  listCheckToolOne: tb_CheckTool[];
+  listCheckToolTwo: tb_CheckTool[];
  list: sectionList[];
  listmic: miscdataList[];
+ listmicMaintenanceType: miscdataList[];
  listmicApplication: miscdataList[];
  listrequestTypeList: requestTypeList[];
  listmicPartStock : miscdataList[];
@@ -585,6 +588,18 @@ export class IndexService {
     // return this.http.get("http://localhost:62943/showTableWebService.asmx/GetSectionList").map((res) => res.json());
     this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbmMiscDataListApplication")
     .toPromise().then(res => this.listmicApplication = res as miscdataList[]);
+  }
+  getDataMicMaintenanceType(){
+    this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbmMiscDataListMaintenanceType")
+    .toPromise().then(res => this.listmicMaintenanceType = res as miscdataList[]);
+  }
+  getDataCheckTool(){
+    this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbCheckTool")
+    .toPromise().then(res => this.listCheckToolTwo = res as tb_CheckTool[]);
+  }
+  getDataCheckToolOne(){
+    this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbCheckToolOne")
+    .toPromise().then(res => this.listCheckToolOne = res as tb_CheckTool[]);
   }
   getDataRequestType(){
     // return this.http.get("http://localhost:62943/showTableWebService.asmx/GetSectionList").map((res) => res.json());

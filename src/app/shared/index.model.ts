@@ -25,7 +25,11 @@ export class miscdataList{
      updateBy : string;
 
 }
+export class tb_CheckTool{
+  checkTool_ID : string;
+  checkTool_Name : string;
 
+} 
 
 
 export class userTypeList{

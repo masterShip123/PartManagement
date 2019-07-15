@@ -52,5 +52,15 @@
   .pointer{
     cursor: pointer;
   }
+  .form-check-inline{
+    width: 20%;
+  }
+  :host {
+    .my-class{
+      width: 30px!important;
+      min-width: unset!important;
+    }
+  }
+ 
 }
 
