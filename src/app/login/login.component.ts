@@ -73,6 +73,7 @@ private islog:boolean = false;
        localStorage.setItem('currentUser', JSON.stringify(username));
        localStorage.setItem('surname', JSON.stringify(this.tbUser[0].surname));
        localStorage.setItem('Username', JSON.stringify(this.tbUser[0].name));
+       console.log("UserrrName : "+this.tbUser[0].name+", Surname : "+this.tbUser[0].surname);
        localStorage.setItem('sectionname', JSON.stringify(this.tbUser[0].sectionname));
        localStorage.setItem('Useremail', JSON.stringify(this.tbUser[0].email));
        localStorage.setItem('passwordUser', JSON.stringify(this.tbUser[0].user_password));

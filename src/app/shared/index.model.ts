@@ -30,6 +30,30 @@ export class tb_CheckTool{
   checkTool_Name : string;
 
 } 
+export class tb_RepairDetail{
+  ID: number;
+  repairDetail_ID: string;
+  part_ID : string;
+  part_name : string;
+  part_qty :number;
+  part_price :number;
+  other_cost :number;
+  total_cost :number;
+  isSelected: boolean;
+  id: number;
+} 
+export class tb_RepairDetail2{
+  ID: number;
+  repairDetail_ID: string;
+  part_ID : string;
+  part_name : string;
+  part_qty :number;
+  part_price :number;
+  other_cost :number;
+  total_cost :number;
+  isSelected: boolean;
+  id: number;
+} 
 
 
 export class userTypeList{
@@ -176,7 +200,7 @@ export class requestHeader{
   concernQA: number;
   createBy : string;
  updateBy : string;
-  
+ maintenanceType: number;
 }
 export class requestPicture{
   attachfile_desc: string;

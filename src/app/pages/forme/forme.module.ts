@@ -19,6 +19,10 @@ import { TypographyComponent } from '../ui-features/typography/typography.compon
 import { SearchComponent } from '../maps/search-map/search/search.component';
 import { EmailService } from '../../shared/email.service';
 import { LightboxModule } from 'ngx-lightbox';
+import { AddRepairComponent } from './add-repair/add-repair.component';
+import { EditRepairComponent } from './edit-repair/edit-repair.component';
+import { DeleteRepairComponent } from './delete-repair/delete-repair.component';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 const COMPONENTS = [
   FormeComponent,
@@ -37,7 +41,9 @@ const MODULES = [
   Ng2SmartTableModule,
   ReactiveFormsModule,
     FormsModule,
-    LightboxModule
+    LightboxModule,
+    OwlDateTimeModule,
+     OwlNativeDateTimeModule,
  
 ];
 
@@ -53,7 +59,10 @@ const SERVICES = [
   ],
   declarations: [
     ...COMPONENTS,
-    RepairRequestComponent
+    RepairRequestComponent,
+    AddRepairComponent,
+    EditRepairComponent,
+    DeleteRepairComponent
     
   ],
   providers: [

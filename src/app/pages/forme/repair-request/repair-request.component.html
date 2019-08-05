@@ -59,7 +59,7 @@
     <div class="col-md-12" >
         <nb-card >
             <nb-tabset fullWidth>
-              <nb-tab tabTitle="Request Detail">
+              <nb-tab tabTitle="Request Detail" >
                 
                   <div class="col-sm-6">
                       <div class="form-group">
@@ -205,7 +205,7 @@
                                       <!-- <label >Choose file</label>    -->
                                   </div>
                                   <button [disabled]="perMission == 'UT1' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" type="submit" (click)="updateRequest(5)" class="btn btn-success">Approve</button>
-                                  <button [disabled]="perMission == 'UT1' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" nbButton status="danger"  (click)="cancelRequest()">Cancel</button>
+                                  <button [disabled]="perMission == 'UT1' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" nbButton status="danger"  (click)="cancelRequest(0)">Cancel</button>
                                 </form>
                               </nb-card-body>
                             </nb-card>
@@ -219,14 +219,14 @@
                                       <!-- <label >Choose file</label>    -->
                                   </div>
                                   <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="updateRequest(1)" type="submit" class="btn btn-success">Approve</button>
-                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" nbButton status="danger"  (click)="cancelRequest()">Cancel</button>
+                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" nbButton status="danger"  (click)="cancelRequest(0)">Cancel</button>
                                 </form>
                               </nb-card-body>
                             </nb-card>
                        </div>
               </nb-tab>
               <!-- Tap Repair -->
-              <nb-tab tabTitle="Repair Detail">
+              <nb-tab tabTitle="Repair Detail" [disabled]="showtabpermission">
                   <div class="col-sm-12">
                       <div class="form-group">
                         <label for="inputWebsite">ตรวจสอบเครื่องมือและเครื่องจักรก่อนการซ่อม* (Check Tooling and Machine before Repaired)</label>  
@@ -236,7 +236,7 @@
                       <div class="form-group">
                           <div >
                               <ng-container *ngFor= "let CheckToolsOne of service.listCheckToolOne">
-                                  <input class="custom-checkbox checked" type="checkbox" id="inlineCheckbox1" value="{{CheckToolsOne.checkTool_ID}}">
+                                  <input class="custom-checkbox checked" (change)="onCheckboxChangeCheckTool(CheckToolsOne,$event)" type="checkbox" id="inlineCheckbox1" value="{{CheckToolsOne.checkTool_ID}}">
                                   <label class="form-check-label" for="inlineCheckbox1">{{CheckToolsOne.checkTool_Name}} </label>
                                   <br>
                               </ng-container>
@@ -258,17 +258,21 @@
                     <div class="col-sm-12">
                         <div class="col-md-6" >
                             <div class="form-group">
-                                <textarea  rows="5" nbInput fullWidth shape="round"  #afterDetail></textarea>
+                                <textarea  rows="5" nbInput fullWidth shape="round"  #afterDetail (input)="onafterDetail($event.target.value)"></textarea>
                               </div>
                         </div>
                         <div class="col-md-6" >
                             <div class="form-group">
                                 <div class="form-check form-check-inline">
-                                    <input class="custom-checkbox checked" type="checkbox" id="inlineCheckbox1" value="option1">
+                                    <!-- <input class="custom-checkbox checked" [(ngModel)]="checkboxAttachfile1" (change)="onAttachfile1($event)" type="checkbox" id="inlineCheckbox1" value="1" #attachfile1> -->
+                                    <input class="custom-checkbox checked" [(ngModel)]="checkboxAttachfile1" (click) ="onAttachfile1($event)" type="checkbox" id="inlineCheckbox1" value="1" #attachfile1>
+                                    
                                     <label class="form-check-label" for="inlineCheckbox1">มี(Yes) </label>
                                   </div>
                                   <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                                    <!-- <input class="form-check-input" [(ngModel)]="checkboxAttachfile2" (change)="onAttachfile2($event)" type="checkbox" id="inlineCheckbox2" value="0" #attachfile2> -->
+                                    <input class="form-check-input" [(ngModel)]="checkboxAttachfile2" (click) ="onAttachfile2($event)" type="checkbox" id="inlineCheckbox2" value="0" #attachfile2>
+                                    
                                     <label class="form-check-label" for="inlineCheckbox2">ไม่มี(No)</label>
                                   </div>
                               </div>
@@ -276,14 +280,12 @@
                     </div>
                     <div class="col-sm-12">
                         <form action="/api/upload" method="post" enctype="multipart/form-data">
-                        <input [disabled]="disableCreate" type="file" multiple class="form-control-file"  id="importFile" (change)="onFileChange($event.target.files)">
+                        <input type="file" multiple class="form-control-file"  id="importFile" (change)="onFileChange2($event.target.files)">
                         </form>    
                           <nb-card class="list-card" size="small">
                                 <nb-card-body>
                                     <form>
                                         <div class="form-group">
-                                            
-                                           
                                             <div class="table-responsive">
                                               <table class="table  table-striped">
                                                 <thead>
@@ -294,29 +296,29 @@
                                                   </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <ng-container *ngFor="let empLists of empList ; let i = index;">
-                                                        <tr *ngIf="showTable == 1">
+                                                    <ng-container *ngFor="let empLists of empList2 ; let i = index;">
+                                                        <tr *ngIf="showTable == 2">
                                                             <td>{{empLists.name}}</td>
                                                             <td><button type="button" class="btn btn-danger btn-xs"
-                                                              (click)="removeLanguague(empLists, i)">
+                                                              (click)="removeLanguague2(empLists, i)">
                                                             <span class="glyphicon glyphicon-trash"></span> Remove
                                                              </button></td>
                                                              <td>
-                                                               <img src='{{urls[i]}}'  (click)="open(i)" class="rounded mb-3 pointer" width="180" height="180">
+                                                               <img src='{{urls2[i]}}'  (click)="open2(i)" class="rounded mb-3 pointer" width="180" height="180">
                                                               <!-- <img src='http://localhost:5000/api/upload'  (click)="open(i)" class="rounded mb-3 pointer" width="180" height="180"> -->
                                                             </td>
                                                           </tr>
                                                     </ng-container>
-                                                    <ng-container *ngFor="let recipient of map1 | keyvalue ; let i = index;">
+                                                    <ng-container *ngFor="let recipient of map2 | keyvalue ; let i = index;">
                                                         <tr *ngIf="showTable == 2">
                                                             <td>{{recipient.value}}</td>
                                                             <td><button [disabled]="true" type="button" class="btn btn-danger btn-xs"
-                                                              (click)="removeLanguague(recipient.key, i)">
+                                                              (click)="removeLanguague2(recipient.key, i)">
                                                             <span class="glyphicon glyphicon-trash"></span> Remove
                                                              </button></td>
                                                              <td>
                                                                
-                                                              <img src='http://localhost:5000/api/upload/{{recipient.key}}'  (click)="open(i)" class="rounded mb-3 pointer" width="180" height="180">
+                                                              <img src='http://localhost:5000/api/upload/{{recipient.key}}'  (click)="open2(i)" class="rounded mb-3 pointer" width="180" height="180">
                                                             </td>
                                                           </tr>
                                                     </ng-container>
@@ -342,7 +344,12 @@
                             <div class="input-group-prepend">
                               <div class="input-group-text">Start(เริ่ม)</div>
                             </div>
-                            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Start(เริ่ม)">
+                            <div class="inputStartTime">
+                              <input class="startTimee" type="number" min="0" max="24" name="time" placeholder="00" (change)="onTime($event,1)">:
+                              <input class="startTimee" type="number" min="0" max="59" name="time" placeholder="00" (change)="onTime($event,2)">
+                            </div>
+                            <!-- <input type="time" name="time" (change)="onTime($event)" placeholder="Start(เริ่ม)"> -->
+                            
                           </div>
                       </div>
                       <div class="col-md-4" >
@@ -351,7 +358,11 @@
                             <div class="input-group-prepend">
                               <div class="input-group-text">Complete(เสร็จสิ้น)</div>
                             </div>
-                            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Complete(เสร็จสิ้น)">
+                            <div class="inputStartTime">
+                              <input class="startTimee" type="number" min="0" max="24" name="time" placeholder="00" (change)="onTime($event,3)">:
+                              <input class="startTimee" type="number" min="0" max="59" name="time" placeholder="00" (change)="onTime($event,4)">
+                            </div>
+                           
                           </div>
                       </div>
                       <div class="col-md-4" >
@@ -360,7 +371,7 @@
                             <div class="input-group-prepend">
                               <div class="input-group-text">Total(รวม)</div>
                             </div>
-                            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Total(รวม)">
+                            <input type="text" class="form-control" id="inlineFormInputGroup" value="{{totalDate | date:'HH:mm'}}">
                           </div>
                       </div>
                     </div>
@@ -374,7 +385,7 @@
                                     <form>
                                         <div class="form-group">
                                             <div class="table-responsive">
-                                                <table class="table table-striped table-hover">
+                                                <table datatable class="row-border hover">
                                                     <thead>
                                                         <tr>
                                                 <th>
@@ -386,7 +397,7 @@
                                                 </th>
                                                             <th>Part ID</th>
                                                             <th>Part Name</th>
-                                                <th>Qty</th>
+                                                            <th>Qty</th>
                                                             <th>Price</th>
                                                             <th>Other Cost</th>
                                                             <th>Total Cost</th>
@@ -394,25 +405,25 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr *ngFor="let item of checklist">
+                                                        <tr *ngFor="let item of checklistArray ; let i = index;">
                                                 <td>
                                                   <span class="custom-checkbox">
                                                     <!-- <input type="checkbox" [(ngModel)]="a.selected" (change)="checkIfAllSelected();">
                                                      -->
-                                                     <input type="checkbox" [(ngModel)]="item.isSelected" name="list_name" value="{{item.id}}" (change)="isAllSelected()"/>
+                                                     <input type="checkbox" [(ngModel)]="item.isSelected" name="list_name" value="{{item.id}}"  (change)="isAllSelected()"/>
                                                     <label for="checkbox1"></label>
                                                   </span>
                                                 </td>
-                                                            <td>Part ID</td>
-                                                            <td>Part Name</td>
-                                                            <td>Qty</td>
-                                                            <td>Price</td>
-                                                            <td>Other Cost</td>
-                                                            <td>Total Cost</td>
+                                                            <td>{{item.part_ID}}</td>
+                                                            <td>{{item.part_name}}</td>
+                                                            <td>{{item.part_price | number}}</td>
+                                                            <td>{{item.part_qty | number}}</td>
+                                                            <td>{{item.other_cost | number}}</td>
+                                                            <td>{{item.total_cost | number}}</td>
                                                             <td>
-                                                                <button type="button" class="btn btn-primary btn-xs">
+                                                                <button type="button" class="btn btn-primary btn-xs" (click) = "onEditRepair(item)">
                                                                     <span class="glyphicon glyphicon-pencil"></span> Edit </button>
-                                                                <button type="button" class="btn btn-danger btn-xs">
+                                                                <button type="button" class="btn btn-danger btn-xs" (click) = "onDelete(item,i)">
                                                                 <span class="glyphicon glyphicon-trash"></span> Remove </button>
                                                             </td>
                                                         </tr>
@@ -426,9 +437,10 @@
                      </div>
                     
                      <div class="col-sm-12">
-                        <button type="button" class="btn btn-success btn-xs">
+                       
+                        <button type="button" class="btn btn-success btn-xs" (click) = "onAddUserlist()">
                             <span class="glyphicon glyphicon-plus"></span> Add </button>
-                        <button type="button" class="btn btn-danger btn-xs">
+                        <button type="button" class="btn btn-danger btn-xs" (click) = "onDeleteAll()">
                         <span class="glyphicon glyphicon-trash"></span> Remove </button>
                         <br>
                         <div class="col-md-4" >
@@ -437,14 +449,14 @@
                         </div>
                         <div class="col-md-8" >
                             <br>
-                            <label for="inputWebsite">ตรวจสอบเครื่องมือและเครื่องจักรก่อนการซ่อม* (Check Tooling and Machine before Repaired)</label>
+                            <label for="inputWebsite">ตรวจสอบเครื่องมือและเครื่องจักรก่อนการซ่อม* (Check Tooling and Machine afther Repaired)</label>
                         </div> 
                     </div>
                     <div class="col-sm-12">
                         <div class="col-md-4" >
                             <div >
-                                <ng-container *ngFor= "let maintenanceTypes of service.listmicMaintenanceType">
-                                    <input class="custom-checkbox checked" type="checkbox" id="inlineCheckbox1" value="{{maintenanceTypes.misc_code}}">
+                                <ng-container *ngFor= "let maintenanceTypes of service.listmicMaintenanceType;let i=index ">
+                                    <input [(ngModel)]="checkedListMaintanan[i]" (click) ="onClickMainTen($event,i)" class="custom-checkbox checked" type="checkbox" id="inlineCheckbox1" value="{{maintenanceTypes.misc_code}}">
                                     <label class="form-check-label" for="inlineCheckbox1">{{maintenanceTypes.value1}} </label>
                                     <br>
                                 </ng-container>
@@ -454,7 +466,7 @@
                             
                             <div >
                                 <ng-container *ngFor= "let CheckToolsTwo of service.listCheckToolTwo">
-                                    <input class="custom-checkbox checked" type="checkbox" id="inlineCheckbox1" value="{{CheckToolsTwo.checkTool_ID}}">
+                                    <input class="custom-checkbox checked" (change)="onCheckboxChangeCheckToolAfther(CheckToolsTwo,$event)" type="checkbox" id="inlineCheckbox1" value="{{CheckToolsTwo.checkTool_ID}}">
                                     <label class="form-check-label" for="inlineCheckbox1">{{CheckToolsTwo.checkTool_Name}} </label>
                                     <br>
                                 </ng-container>
@@ -475,24 +487,34 @@
                     <div class="col-sm-12">
                         <div class="col-md-4" >
                             <div class="form-group">
-                                <textarea  rows="5" nbInput fullWidth shape="round"  #afterComment></textarea>
+                                <textarea  rows="5" nbInput fullWidth shape="round" (input)="onaftercomment($event.target.value)" #afterComment></textarea>
                               </div>
                         </div>
                         <div class="col-md-8" >
                             <div class="form-group">
                                 <div class="form-check form-check-inline">
-                                    <input class="custom-checkbox checked" type="checkbox" id="inlineCheckbox1" value="option1">
+                                    <input class="custom-checkbox checked" [(ngModel)]="checkboxconcernQA1" (click) ="onconcernQA1($event)" type="checkbox" id="inlineCheckbox1" value="1">
                                     <label class="form-check-label" for="inlineCheckbox1">เกี่ยวข้อง</label>
                                   </div>
                                   <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                                    <input class="form-check-input" [(ngModel)]="checkboxconcernQA2" (click) ="onconcernQA2($event)" type="checkbox" id="inlineCheckbox2" value="0">
                                     <label class="form-check-label" for="inlineCheckbox2">ไม่เกี่ยวข้อง</label>
                                   </div>
                                   <br>
                                   <br>
                                   <label for="inputWebsite">ความเห็นสำหรับ QA</label>
                                   <br>
-                                  <div class="form-check form-check-inline">
+                                  <div>
+                                    <ng-container *ngFor= "let listmicJudgements of service.listmicJudgement;let i=index ">
+                                      <div class="form-check form-check-inline">
+                                        <input [(ngModel)]="checkedListMicJuddment[i]" (click) ="onClickJudgement($event,i)" class="custom-checkbox checked" type="checkbox" id="inlineCheckbox1" value="{{listmicJudgements.misc_code}}">
+                                      <label class="form-check-label" for="inlineCheckbox1">{{listmicJudgements.value1}} </label>
+                                      
+                                      </div>
+                                      
+                                  </ng-container>
+                                  </div>
+                                  <!-- <div class="form-check form-check-inline">
                                       <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
                                       <label class="form-check-label" for="inlineCheckbox2">OK</label>
                                     </div>
@@ -503,7 +525,7 @@
                                       <div class="form-check form-check-inline">
                                           <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
                                           <label class="form-check-label" for="inlineCheckbox2">Special accept</label>
-                                        </div>
+                                        </div> -->
                               </div>
                         </div>
                         <br>
@@ -519,8 +541,8 @@
                                   <div class="form-group">
                                       <label *ngIf="showRequestPerson">{{request_by}}</label>   
                                   </div>
-                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="updateRequest(1)" type="submit" class="btn btn-success btn-xs">Approve</button>
-                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="cancelRequest()" type="submit" class="btn btn-danger btn-xs">Cancel</button>
+                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT1' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="updateRequest(2)" type="submit" class="btn btn-success btn-xs">Approve</button>
+                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT1' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="cancelRequest(0)" type="submit" class="btn btn-danger btn-xs">Cancel</button>
                                   
                                   <!-- <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" nbButton status="danger" class="btn-xs" (click)="cancelRequest()">Cancel</button> -->
                                 
@@ -537,8 +559,8 @@
                                   <div class="form-group">
                                       <!-- <label >Choose file</label>    -->
                                   </div>
-                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="updateRequest(1)" type="submit" class="btn btn-success btn-xs">Approve</button>
-                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="cancelRequest()" type="submit" class="btn btn-danger btn-xs">Cancel</button>
+                                  <button [disabled]="perMission == 'UT1' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="updateRequest(5)" type="submit" class="btn btn-success btn-xs">Approve</button>
+                                  <button [disabled]="perMission == 'UT1' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="cancelRequest(0)" type="submit" class="btn btn-danger btn-xs">Cancel</button>
                                   </form>
                               </nb-card-body>
                             </nb-card>
@@ -552,7 +574,7 @@
                                       <!-- <label >Choose file</label>    -->
                                   </div>
                                   <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="updateRequest(1)" type="submit" class="btn btn-success btn-xs">Approve</button>
-                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="cancelRequest()" type="submit" class="btn btn-danger btn-xs">Cancel</button>
+                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="cancelRequest(0)" type="submit" class="btn btn-danger btn-xs">Cancel</button>
                                     </form>
                               </nb-card-body>
                             </nb-card>
@@ -566,7 +588,7 @@
                                       <!-- <label >Choose file</label>    -->
                                   </div>
                                   <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="updateRequest(1)" type="submit" class="btn btn-success btn-xs">Approve</button>
-                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="cancelRequest()" type="submit" class="btn btn-danger btn-xs">Cancel</button>
+                                  <button [disabled]="perMission == 'UT5' || perMission == 'UT2' || perMission == 'UT4' || perMission == 'UT3' || perMission == 'UT6'" (click)="cancelRequest(0)" type="submit" class="btn btn-danger btn-xs">Cancel</button>
                                    </form>
                               </nb-card-body>
                             </nb-card>

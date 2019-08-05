@@ -3,19 +3,22 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs';
 import { Response } from '@angular/http';
-import { sectionList, miscdataList, userTypeList, user, departmentList, FactoryList, ProductionLineList, ProvinceList, unitTypeList, locationList, makerList, moldTypeList, partMasterList, requestTypeList, tb_CheckTool } from './index.model';
+import { sectionList, miscdataList, userTypeList, user, departmentList, FactoryList, ProductionLineList, ProvinceList, unitTypeList, locationList, makerList, moldTypeList, partMasterList, requestTypeList, tb_CheckTool, tb_RepairDetail, tb_RepairDetail2 } from './index.model';
 import { HttpClient } from "@angular/common/http";
 
 
 @Injectable()
 export class IndexService {
-
+  checklistArray: Array<tb_RepairDetail> = [];
   listCheckToolOne: tb_CheckTool[];
   listCheckToolTwo: tb_CheckTool[];
+  listRepairDetail: tb_RepairDetail[];
+  listRepairDetail2: tb_RepairDetail2[];
  list: sectionList[];
  listmic: miscdataList[];
  listmicMaintenanceType: miscdataList[];
  listmicApplication: miscdataList[];
+ listmicJudgement: miscdataList[];
  listrequestTypeList: requestTypeList[];
  listmicPartStock : miscdataList[];
  listTiming: miscdataList[];
@@ -43,8 +46,8 @@ export class IndexService {
   getRequestHeaderwhereID(reID) {
     return this.http.get("http://localhost:62943/showTableWebService.asmx/GetRequestHeaderwhereID?request_ID="+reID).map((res) => res.json());
   }
-  getRequestPicturewhereID(reID) {
-    return this.http.get("http://localhost:62943/showTableWebService.asmx/GetRequestPicture?request_ID="+reID).map((res) => res.json());
+  getRequestPicturewhereID(reID,befor_afther) {
+    return this.http.get("http://localhost:62943/showTableWebService.asmx/GetRequestPicture?request_ID="+reID+"&attfilebeforOrAfter="+befor_afther).map((res) => res.json());
   }
   getRequestHeaderwhereDepartment(section_ID) {
     return this.http.get("http://localhost:62943/showTableWebService.asmx/GetWhereRequestHeaderForDepartMent?section_ID="+section_ID).map((res) => res.json());
@@ -191,6 +194,23 @@ export class IndexService {
             });
       });
     });
+  }
+  getDatarepairDetail2(): Promise<any>{
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        //resolve(this.smartTableData);
+        this.http.get("http://localhost:62943/showTableWebService.asmx/GetTbRepairDetail",{
+          }).subscribe((res: Response) => {
+            // res2 => this.listRepairDetail2 = res2 as tb_RepairDetail2[];
+                this.listRepairDetail2 = res.json();
+                resolve(this.listRepairDetail2);  // ใส่ค่าในตาราง
+                console.log("Check Row After : "+ this.listRepairDetail2.length);
+                
+              }, (error: any) => {
+            });
+      },1000);
+    });
+    
   }
   getCheckToolList(): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -589,6 +609,11 @@ export class IndexService {
     this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbmMiscDataListApplication")
     .toPromise().then(res => this.listmicApplication = res as miscdataList[]);
   }
+  getDataMicJuddment(){
+    // return this.http.get("http://localhost:62943/showTableWebService.asmx/GetSectionList").map((res) => res.json());
+    this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbmMiscDataListJuddment")
+    .toPromise().then(res => this.listmicJudgement = res as miscdataList[]);
+  }
   getDataMicMaintenanceType(){
     this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbmMiscDataListMaintenanceType")
     .toPromise().then(res => this.listmicMaintenanceType = res as miscdataList[]);
@@ -596,6 +621,21 @@ export class IndexService {
   getDataCheckTool(){
     this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbCheckTool")
     .toPromise().then(res => this.listCheckToolTwo = res as tb_CheckTool[]);
+  }
+  getDatarepairDetail(){
+    this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbRepairDetail")
+    .toPromise().then(res => this.listRepairDetail = res as tb_RepairDetail[]);
+    console.log("Ship Call : "+this.listRepairDetail);
+  }
+  // getDatarepairDetail2(){
+  //   setTimeout(() => {
+  //     this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbRepairDetail")
+  //     .toPromise().then(res => this.listRepairDetail2 = res as tb_RepairDetail2[]);
+  //   },2000);
+   
+  // }
+  getDatarepairDetailwhereID(reID) {
+    return this.http.get("http://localhost:62943/showTableWebService.asmx/GetrepairDetailwhereIDForPartMaster?part_ID="+reID).map((res) => res.json());
   }
   getDataCheckToolOne(){
     this.httpc.get("http://localhost:62943/showTableWebService.asmx/GetTbCheckToolOne")
@@ -648,7 +688,86 @@ export class IndexService {
       });
     });
   }
+  posttb_RepairDetail(req_ID,partIDs,qtys,prices,othercosts,totalcosts,createBy): Promise<any> {
+    //this.user
+    console.log("ship : "+this.user);
 
+    return new Promise((resolve, reject) => {
+     
+        // resolve(this.smartTableData);
+       
+          return this.http.get('http://localhost:62943/showTableWebService.asmx/Inserttb_RepairDetail?req_ID='+req_ID
+          +'&partIDs='+partIDs+'&qtys='+qtys
+          +'&prices='+prices+'&othercosts='+othercosts+'&totalcosts='+totalcosts
+          +'&createBy='+createBy,{
+                }).subscribe((res: Response) => {
+                  this.getDatarepairDetail();
+                  resolve("Success");
+                  console.log("Call back : "+ res);
+              })
+       
+  
+    });
+  }
+  deletetb_RepairDetail(req_ID,repairDetail_ID,createBy): Promise<any> {
+    console.log("Call API ID : "+"http://localhost:62943/showTableWebService.asmx/deltetb_RepairDetail?req_ID="+req_ID
+    +'&repairDetail_ID='+repairDetail_ID+'&createBy='+createBy);
+    return new Promise((resolve, reject) => {
+      // setTimeout(() => {
+          return this.http.get('http://localhost:62943/showTableWebService.asmx/deltetb_RepairDetail?req_ID='+req_ID
+          +'&repairDetail_ID='+repairDetail_ID+'&createBy='+createBy,{
+                })
+                .subscribe((res: Response) => {
+                  this.getDatarepairDetail();
+                  
+                   console.log("Call back : "+ res);
+                })
+      //           .toPromise()
+      // .then(
+      //   res => { // Success
+      //     this.getDatarepairDetail();
+      //     console.log("Call Back: "+this.listRepairDetail.length);
+      //     this.checklistArray = [];
+      //     for(let indexx = 0; indexx <  this.listRepairDetail.length ;indexx++){
+      //       let repairDetailArray =  new tb_RepairDetail();
+      //       repairDetailArray.id = this.listRepairDetail[indexx].ID;
+      //       repairDetailArray.repairDetail_ID = this.listRepairDetail[indexx].repairDetail_ID;
+      //       repairDetailArray.part_ID = this.listRepairDetail[indexx].part_ID;
+      //       repairDetailArray.part_name = this.listRepairDetail[indexx].part_name;
+      //       repairDetailArray.part_price = this.listRepairDetail[indexx].part_price;
+      //       repairDetailArray.part_qty = this.listRepairDetail[indexx].part_qty;
+      //       repairDetailArray.other_cost = this.listRepairDetail[indexx].other_cost;
+      //       repairDetailArray.total_cost = this.listRepairDetail[indexx].total_cost;
+      //       repairDetailArray.isSelected = false;
+      //       this.checklistArray.push(repairDetailArray)
+      //     }
+      //   }
+      // );
+                //.pipe((
+                
+                //);
+      // });
+    });
+  }
+  puttb_RepairDetail(req_ID,repairDetail_ID,partIDs,qtys,othercosts,totalcosts,updateBy): Promise<any> {
+    //this.user
+    console.log("ship : "+this.user);
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        // resolve(this.smartTableData);
+       
+          return this.http.get('http://localhost:62943/showTableWebService.asmx/editttb_RepairDetail?req_ID='+req_ID
+          +'&repairDetail_ID='+repairDetail_ID+'&partIDs='+partIDs+'&qtys='+qtys
+          +'&othercosts='+othercosts+'&totalcosts='+totalcosts
+          +'&updateBy='+updateBy,{
+                }).subscribe((res: Response) => {
+                  
+              })
+       
+      });
+    });
+  }
   postDataSection(department,sectionid,sectionname,StatusValue): Promise<any> {
     
 
@@ -702,13 +821,18 @@ export class IndexService {
       });
     });
   }
-  putDataRequestHeader(request_no,status,request_by): Promise<any> {
-    
-   
+  putDataRequestHeader(permissionID,request_no,status,request_by,checktoolBefor,aftherTextArea,attachfilevalue,totalstH,totalcomH
+    ,maintannaAddRepair,checktoolAfther,aftherCommnet,concernQAvalue,mainJuddgement): Promise<any> {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-          return this.http.get('http://localhost:62943/showTableWebService.asmx/updateRequestHeader?request_no='+request_no
-          +'&status='+status+'&request_by='+request_by,{
+          return this.http.get('http://localhost:62943/showTableWebService.asmx/updateRequestHeader?permission='+permissionID+'&request_no='+request_no
+          +'&status='+status+'&request_by='+request_by
+          +'&checktoolBefor='+checktoolBefor+'&aftherTextArea='+aftherTextArea
+          +'&attachfilevalue='+attachfilevalue+'&timeStart='+totalstH
+          +'&timeComplete='+totalcomH
+          +'&maintannaAddRepair='+maintannaAddRepair+'&checktoolAfther='+checktoolAfther
+          +'&aftherCommnet='+aftherCommnet+'&concernQAvalue='+concernQAvalue
+          +'&mainJuddgement='+mainJuddgement,{
                 }).subscribe((res: Response) => {
                   
                 }, (error: any) => {

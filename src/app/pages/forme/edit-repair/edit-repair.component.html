@@ -1,0 +1,59 @@
+<nb-card>
+  <nb-card-header>Edit Use Part</nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label for="inputFirstName">Part ID *</label>
+          <input type="text" class="form-control" id="partID" value="{{partIDsection}}" disabled #partIDs required>
+          <!-- <div  *ngIf="showValid">
+            <div>
+                <h5>Enter incorrect</h5>
+              </div>
+            </div> -->
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label for="inputLastName">Part Name</label>
+          <input type="text" class="form-control" id="partname" value="{{partnamesection}}" disabled #partnamee>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label for="inputLastName">Qty</label>
+          <input (keypress)="numberOnly($event)" type="text" class="form-control" id="qty" value="{{qtySection}}" (keyup)="changeQty($event.target.value)" #qtys>
+          <div  *ngIf="showValid">
+            <div>
+                <h5>Value Max Qty</h5>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label for="inputWebsite">Price</label>
+          <input (keypress)="numberOnly($event)" type="text" class="form-control" id="price" value="{{pricesection}}"  disabled #prices>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label for="inputWebsite">Other Cost</label>
+          <input type="number" step="0.01" decimal-precision="2" class="form-control" id="othercost" value="{{otherSection}}" (keyup)="changeOther($event.target.value)" #othercosts>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label for="inputWebsite">Total Cost</label>
+          <input type="text" class="form-control" id="totalcost" value="{{Showtotalc | number}}" disabled #totalcosts>
+        </div>
+      </div>
+      </div>
+    <button nbButton status="danget"  (click)="cancel()">Cancel</button>
+    <button nbButton status="success" [disabled]="partIDs.value && partnamee.value && qtys.value && prices.value && othercosts.value && totalcosts.value" 
+    (click)="edit(partIDs.value,partnamee.value,qtys.value,prices.value,othercosts.value,totalcosts.value)">
+    Save</button>
+  </nb-card-body>
+</nb-card>

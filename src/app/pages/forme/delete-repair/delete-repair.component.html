@@ -1,0 +1,15 @@
+<nb-card>
+  <nb-card-header>Delete Use Part</nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label for="inputFirstName">Are you sure you want to delete these Recodes?</label>
+        </div>
+      </div>
+    </div>
+    
+    <button nbButton (click)="cancel()">Cancel</button>
+    <button type="button" class="btn btn-danger" (click)="delete()">Delete</button>
+  </nb-card-body>
+</nb-card>
